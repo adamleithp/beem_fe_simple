@@ -74,7 +74,6 @@
 					<button type="submit">create request</button>
 				</form>
 			</div>
-
 		</div>
 
 		<div class="ba w-50">
@@ -164,6 +163,14 @@ export default {
 							amount: ${this.request.offeredPrice.amount},
 							currencyCode: "${this.request.offeredPrice.currencyCode}",
 						}
+						package:{
+							name: "${this.request.package.name}",
+							description: "${this.request.package.description}",
+							price:{
+								amount: ${this.request.package.price.amount},
+								currencyCode: "${this.request.package.price.currencyCode}"
+							}
+						}
 					}) {
 						id
 						status
@@ -175,6 +182,13 @@ export default {
 						}
 						toLocation {
 							lat, lng, googlePlaceId
+						}
+						package {
+							name
+							description
+							price {
+								amount, currencyCode
+							}
 						}
 					}
 				}`
