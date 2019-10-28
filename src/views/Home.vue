@@ -26,6 +26,7 @@
 
 		<div class="ba w-50 pa3">
 			<h2>User 1: Traveller</h2>
+			<TripForm/>
 		</div>
   </div>
 </template>
@@ -34,11 +35,13 @@
 /* eslint-disable no-console */
 import { mapState } from 'vuex';
 import RequestForm from '@/components/RequestForm.vue'
+import TripForm from '@/components/TripForm.vue'
 
 export default {
 	name: 'home',
 	components: {
 		RequestForm,
+		TripForm
 	},
 	data() {
 		return {

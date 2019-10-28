@@ -37,4 +37,33 @@ export default {
     }
   }
 }
+
+input {
+	margin-bottom: 1em;
+	width: 100%;
+	padding: .5em;
+	box-sizing: border-box;
+	height: 3em;
+}
+label {
+	display: block;
+	margin-bottom: .5em;
+}
+
+.location-suggestion-dropdown {
+	padding: 0;
+	list-style: none;
+	margin: 0;
+	position: absolute;
+	top: calc(100% - 1em);
+	left: 0;
+	width: 100%;
+	z-index: 1;
+
+	button {
+		width: 100%;
+    text-align: left;
+    padding: 0.5em 0.6em;
+	}
+}
 </style>
