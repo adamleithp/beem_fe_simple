@@ -34,7 +34,7 @@
 		</div>
 
 		<div>
-			<input type="date" v-model="trip.fromDateMeta" @change="handleFromDateChange('to')">
+			<input type="date" v-model="trip.toDateMeta" @change="handleFromDateChange('to')">
 		</div>
 
 		<button type="submit">create trip</button>
@@ -57,17 +57,17 @@ function parseDateFromYMD(str) {
 
 
 function formatDatetoYMD(date) {
-    var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+	let d = new Date(date),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
 
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
+	if (month.length < 2)
+			month = '0' + month;
+	if (day.length < 2)
+			day = '0' + day;
 
-    return [year, month, day].join('-');
+	return [year, month, day].join('-');
 }
 
 export default {
@@ -90,11 +90,11 @@ export default {
 					lat: 13.1059816,
 					lng: -59.61317409999999
 				},
-				fromDate: 123123123,
-				toDate: 123123123,
+				fromDate: parseDateFromYMD(formatDatetoYMD(new Date)), // lol
+				toDate: parseDateFromYMD(formatDatetoYMD(new Date)),// lol
 
-				fromDateMeta: formatDatetoYMD(new Date),
 				toDateMeta: formatDatetoYMD(new Date),
+				fromDateMeta: formatDatetoYMD(new Date),
 			},
 		}
 	},
@@ -104,16 +104,22 @@ export default {
 
 
 		handleFromDateChange(context) {
-			const whichLocationObject = (context === 'to' ? 'toLocation' : 'fromLocation');
-			console.log('whichLocationObject', whichLocationObject);
+			const whichLocationMetaObject = (context === 'to' ? 'toDateMeta' : 'fromDateMeta');
+			const whichLocationObject = (context === 'to' ? 'toDate' : 'fromDate');
+			// Build date
+			const date = parseDateFromYMD(this.trip[whichLocationMetaObject]);
 
-			const date = parseDateFromYMD(this.trip.fromDateMeta);
-			console.log('this', date);
+			// Assign to state
+			this.trip[whichLocationObject] = date;
+			console.log('this.trip', this.trip);
 		},
 
 		async handleTripCreate() {
+			console.log('this.trip', this.trip.toDate);
+			console.log('this.trip', this.trip.fromDate);
+
 			// Call async action
-			// this.$store.dispatch('createTrip', this.trip)
+			this.$store.dispatch('createTrip', this.trip)
 		},
 
 
