@@ -11,6 +11,8 @@
 						<h3>name: {{request.package.name}}</h3>
 						<p>Status: {{request.status}}</p>
 						<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
+						<p><strong>address of requested item</strong>: <Place :placeId="request.fromLocation.googlePlaceId"/></p>
+						<p><strong>Needs delivery to</strong>: <Place :placeId="request.toLocation.googlePlaceId"/></p>
 					</div>
 				</li>
 			</ul>
