@@ -1,7 +1,9 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+/* eslint-disable no-console */
 
-Vue.use(Vuex)
+import Vue from 'vue';
+import Vuex from 'vuex';
+
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -14,12 +16,12 @@ export default new Vuex.Store({
     },
     setMyTrips(state, array) {
       state.myTrips = array;
-    }
+    },
   },
   actions: {
     async getMyRequests({ commit }) {
       const query = JSON.stringify({
-				query: `query {
+        query: `query {
 					myRequests {
 						id
 						status
@@ -47,13 +49,13 @@ export default new Vuex.Store({
 							}
 						}
 					}
-				}`
-			});
+				}`,
+      });
 
       try {
         const response = await fetch(process.env.VUE_APP_API_URL, {
           headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
           },
           method: 'POST',
           body: query,
@@ -62,15 +64,98 @@ export default new Vuex.Store({
         const responseJson = await response.json();
         commit('setMyRequests', responseJson.data.myRequests);
         return true;
-
       } catch (error) {
         return false;
       }
     },
 
-		async getMyTrips({ commit }) {
+    async getMyTrip({commit}, payload) {
+			console.log('payload', payload);
+
       const query = JSON.stringify({
-				query: `query {
+        query: `query {
+					myTrip(
+						id: "${payload}"
+					) {
+						id
+						fromDate, toDate
+						fromLocation {
+							lat, lng, googlePlaceId
+						}
+						toLocation {
+							lat, lng, googlePlaceId
+						}
+					}
+				}`,
+			});
+
+			console.log(commit);
+
+      try {
+        const response = await fetch(process.env.VUE_APP_API_URL, {
+          headers: {
+            'content-type': 'application/json',
+          },
+          method: 'POST',
+          body: query,
+        });
+
+        const responseJson = await response.json();
+        return responseJson.data.myTrip;
+      } catch (error) {
+        return false;
+      }
+		},
+
+    async getRequestsForLocation({ commit }, payload) {
+      const query = JSON.stringify({
+        query: `query {
+					getRequestsForLocation(
+						placeId: "${payload}"
+					) {
+						id
+						status
+						offeredPrice {
+							amount, currencyCode
+						}
+						fromLocation {
+							lat, lng, googlePlaceId
+						}
+						toLocation {
+							lat, lng, googlePlaceId
+						}
+						package {
+							name
+							description
+							price {
+								amount, currencyCode
+							}
+						}
+					}
+				}`,
+			});
+
+			console.log(commit);
+
+      try {
+        const response = await fetch(process.env.VUE_APP_API_URL, {
+          headers: {
+            'content-type': 'application/json',
+          },
+          method: 'POST',
+          body: query,
+        });
+
+        const responseJson = await response.json();
+        return responseJson.data.getRequestsForLocation;
+      } catch (error) {
+        return false;
+      }
+		},
+
+    async getMyTrips({ commit }) {
+      const query = JSON.stringify({
+        query: `query {
 					myTrips {
 						id
 						fromDate, toDate
@@ -81,13 +166,13 @@ export default new Vuex.Store({
 							lat, lng, googlePlaceId
 						}
 					}
-				}`
-			});
+				}`,
+      });
 
       try {
         const response = await fetch(process.env.VUE_APP_API_URL, {
           headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
           },
           method: 'POST',
           body: query,
@@ -96,16 +181,14 @@ export default new Vuex.Store({
         const responseJson = await response.json();
         commit('setMyTrips', responseJson.data.myTrips);
         return true;
-
       } catch (error) {
         return false;
       }
     },
 
-
     async createRequest({ dispatch }, payload) {
       const query = JSON.stringify({
-				query: `mutation {
+        query: `mutation {
 					createRequest(input:{
 						fromLocation: {
 							lat: ${payload.fromLocation.lat},
@@ -149,13 +232,13 @@ export default new Vuex.Store({
 							}
 						}
 					}
-				}`
-			});
+				}`,
+      });
 
       try {
         await fetch(process.env.VUE_APP_API_URL, {
           headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
           },
           method: 'POST',
           body: query,
@@ -164,15 +247,14 @@ export default new Vuex.Store({
         // const responseJson = await response.json();
         await dispatch('getMyRequests');
         return true;
-
       } catch (error) {
         return false;
       }
-		},
+    },
 
     async createTrip({ dispatch }, payload) {
       const query = JSON.stringify({
-				query: `mutation {
+        query: `mutation {
 					createTrip(input:{
 						fromLocation: {
 							lat: ${payload.fromLocation.lat},
@@ -196,13 +278,13 @@ export default new Vuex.Store({
 							lat, lng, googlePlaceId
 						}
 					}
-				}`
-			});
+				}`,
+      });
 
       try {
         await fetch(process.env.VUE_APP_API_URL, {
           headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
           },
           method: 'POST',
           body: query,
@@ -210,10 +292,9 @@ export default new Vuex.Store({
 
         await dispatch('getMyTrips');
         return true;
-
       } catch (error) {
         return false;
       }
     },
   },
-})
+});

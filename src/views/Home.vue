@@ -6,7 +6,7 @@
 			<h3>My Requests</h3>
 
 			<ul v-if="this.myRequests" class="list pa0 ma0 mb3">
-				<li v-for="(request) in this.myRequests" :key="request.id">
+				<li v-for="(request) in this.myRequests" :key="request.id" class="mb3">
 					<div class="ba pa3">
 						<h3>name: {{request.package.name}}</h3>
 						<p>Status: {{request.status}}</p>
@@ -31,17 +31,19 @@
 
 			<h3>My Trips</h3>
 			<ul v-if="this.myTrips" class="list pa0 ma0 mb3">
-				<li v-for="(trip) in this.myTrips" :key="trip.id">
-					<div class="ba pa3 flex justify-between">
-						<div>
-							<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
-							<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
+				<li v-for="(trip) in this.myTrips" :key="trip.id" class="mb3">
+					<router-link :to="{ name: 'my-trip', params: { id: trip.id }}">
+						<div class="ba pa3 flex justify-between">
+							<div>
+								<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
+								<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
+							</div>
+							<div class="tr">
+								<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
+								<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
+							</div>
 						</div>
-						<div class="tr">
-							<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
-							<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
-						</div>
-					</div>
+					</router-link>
 				</li>
 			</ul>
 
@@ -58,7 +60,6 @@
 </template>
 
 <script>
-
 /* eslint-disable no-console */
 import { mapState } from 'vuex';
 import RequestForm from '@/components/RequestForm.vue'
