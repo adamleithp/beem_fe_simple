@@ -6,22 +6,86 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    myRequests: [],
-    myTrips: [],
-  },
-  mutations: {
-    setMyRequests(state, array) {
-      state.myRequests = array;
-    },
-    setMyTrips(state, array) {
-      state.myTrips = array;
-    },
-  },
-  actions: {
-    async getMyRequests({ commit }) {
-      const query = JSON.stringify({
-        query: `query {
+	state: {
+		myRequests: [],
+		myTrips: [],
+	},
+	mutations: {
+		setMyRequests(state, array) {
+			state.myRequests = array;
+		},
+		setMyTrips(state, array) {
+			state.myTrips = array;
+		},
+	},
+	actions: {
+
+		async acceptRequestOnMyTrip(_, payload){
+			const {tripId, requestId} = payload;
+
+			const query = JSON.stringify({
+				query: `mutation {
+					attachRequestToTrip(input:{
+						tripId:"${tripId}",
+						requestId:"${requestId}"
+					})
+					{
+						id
+						fromDate, toDate
+						fromLocation {
+							lat, lng, googlePlaceId
+						}
+						toLocation {
+							lat, lng, googlePlaceId
+						}
+						attachedRequests {
+							id
+							status
+							offeredPrice {
+								currencyCode
+								amount
+							}
+							toLocation {
+								lat, lng, googlePlaceId
+							}
+							fromLocation {
+								lat, lng, googlePlaceId
+							}
+							package {
+								name
+								description
+								price {
+									amount, currencyCode
+								}
+							}
+						}
+					}
+				}`,
+			});
+
+			try {
+				const response = await fetch(process.env.VUE_APP_API_URL, {
+					headers: {
+						'content-type': 'application/json',
+					},
+					method: 'POST',
+					body: query,
+				});
+
+				const responseJson = await response.json();
+				console.log('acceptRequestOnMyTrip TRIP', responseJson.data.attachRequestToTrip);
+
+				// commit('setMyRequests', responseJson.data.myRequests);
+				return responseJson.data.attachRequestToTrip;
+			} catch (error) {
+				return false;
+			}
+
+		},
+
+		async getMyRequests({ commit }) {
+			const query = JSON.stringify({
+				query: `query {
 					myRequests {
 						id
 						status
@@ -50,251 +114,268 @@ export default new Vuex.Store({
 						}
 					}
 				}`,
-      });
+			});
 
-      try {
-        const response = await fetch(process.env.VUE_APP_API_URL, {
-          headers: {
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-          body: query,
-        });
+			try {
+				const response = await fetch(process.env.VUE_APP_API_URL, {
+					headers: {
+						'content-type': 'application/json',
+					},
+					method: 'POST',
+					body: query,
+				});
 
-        const responseJson = await response.json();
-        commit('setMyRequests', responseJson.data.myRequests);
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
+				const responseJson = await response.json();
+				commit('setMyRequests', responseJson.data.myRequests);
+				return true;
+			} catch (error) {
+				return false;
+			}
+		},
 
-    async getMyTrip({commit}, payload) {
-			console.log('payload', payload);
-
-      const query = JSON.stringify({
-        query: `query {
+		async getMyTrip(_, payload) {
+			const query = JSON.stringify({
+				query: `query {
 					myTrip(
 						id: "${payload}"
-					) {
-						id
-						fromDate, toDate
-						fromLocation {
-							lat, lng, googlePlaceId
-						}
-						toLocation {
-							lat, lng, googlePlaceId
-						}
-					}
-				}`,
-			});
-
-			console.log(commit);
-
-      try {
-        const response = await fetch(process.env.VUE_APP_API_URL, {
-          headers: {
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-          body: query,
-        });
-
-        const responseJson = await response.json();
-        return responseJson.data.myTrip;
-      } catch (error) {
-        return false;
-      }
-		},
-
-    async getRequestsForLocation({ commit }, payload) {
-      const query = JSON.stringify({
-        query: `query {
-					getRequestsForLocation(
-						placeId: "${payload}"
-					) {
-						id
-						status
-						offeredPrice {
-							amount, currencyCode
-						}
-						fromLocation {
-							lat, lng, googlePlaceId
-						}
-						toLocation {
-							lat, lng, googlePlaceId
-						}
-						package {
-							name
-							description
-							price {
-								amount, currencyCode
+						) {
+							id
+							fromDate, toDate
+							fromLocation {
+								lat, lng, googlePlaceId
+							}
+							toLocation {
+								lat, lng, googlePlaceId
+							}
+							attachedRequests {
+								id
+								status
+								offeredPrice {
+									amount, currencyCode
+								}
+								fromLocation {
+									lat, lng, googlePlaceId
+								}
+								toLocation {
+									lat, lng, googlePlaceId
+								}
+								package {
+									name
+									description
+									price {
+										amount, currencyCode
+									}
+								}
 							}
 						}
-					}
-				}`,
-			});
+					}`,
+				});
 
-			console.log(commit);
+				try {
+					const response = await fetch(process.env.VUE_APP_API_URL, {
+						headers: {
+							'content-type': 'application/json',
+						},
+						method: 'POST',
+						body: query,
+					});
 
-      try {
-        const response = await fetch(process.env.VUE_APP_API_URL, {
-          headers: {
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-          body: query,
-        });
+					const responseJson = await response.json();
+					return responseJson.data.myTrip;
+				} catch (error) {
+					return false;
+				}
+			},
 
-        const responseJson = await response.json();
-        return responseJson.data.getRequestsForLocation;
-      } catch (error) {
-        return false;
-      }
-		},
-
-    async getMyTrips({ commit }) {
-      const query = JSON.stringify({
-        query: `query {
-					myTrips {
-						id
-						fromDate, toDate
-						fromLocation {
-							lat, lng, googlePlaceId
-						}
-						toLocation {
-							lat, lng, googlePlaceId
-						}
-					}
-				}`,
-      });
-
-      try {
-        const response = await fetch(process.env.VUE_APP_API_URL, {
-          headers: {
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-          body: query,
-        });
-
-        const responseJson = await response.json();
-        commit('setMyTrips', responseJson.data.myTrips);
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
-
-    async createRequest({ dispatch }, payload) {
-      const query = JSON.stringify({
-        query: `mutation {
-					createRequest(input:{
-						fromLocation: {
-							lat: ${payload.fromLocation.lat},
-							lng: ${payload.fromLocation.lng},
-							googlePlaceId: "${payload.fromLocation.googlePlaceId}",
-						}
-						toLocation: {
-							lat: ${payload.toLocation.lat},
-							lng: ${payload.toLocation.lng},
-							googlePlaceId: "${payload.toLocation.googlePlaceId}",
-						}
-						offeredPrice:{
-							amount: ${payload.offeredPrice.amount},
-							currencyCode: "${payload.offeredPrice.currencyCode}",
-						}
-						package:{
-							name: "${payload.package.name}",
-							description: "${payload.package.description}",
-							price:{
-								amount: ${payload.package.price.amount},
-								currencyCode: "${payload.package.price.currencyCode}"
+			async getRequestsForLocation(_, payload) {
+				const query = JSON.stringify({
+					query: `query {
+						getRequestsForLocation(
+							placeId: "${payload}"
+							) {
+								id
+								status
+								offeredPrice {
+									amount, currencyCode
+								}
+								fromLocation {
+									lat, lng, googlePlaceId
+								}
+								toLocation {
+									lat, lng, googlePlaceId
+								}
+								package {
+									name
+									description
+									price {
+										amount, currencyCode
+									}
+								}
 							}
-						}
-					}) {
-						id
-						status
-						offeredPrice {
-							amount, currencyCode
-						}
-						fromLocation {
-							lat, lng, googlePlaceId
-						}
-						toLocation {
-							lat, lng, googlePlaceId
-						}
-						package {
-							name
-							description
-							price {
-								amount, currencyCode
+						}`,
+					});
+
+					try {
+						const response = await fetch(process.env.VUE_APP_API_URL, {
+							headers: {
+								'content-type': 'application/json',
+							},
+							method: 'POST',
+							body: query,
+						});
+
+						const responseJson = await response.json();
+						return responseJson.data.getRequestsForLocation;
+					} catch (error) {
+						return false;
+					}
+				},
+
+				async getMyTrips({ commit }) {
+					const query = JSON.stringify({
+						query: `query {
+							myTrips {
+								id
+								fromDate, toDate
+								fromLocation {
+									lat, lng, googlePlaceId
+								}
+								toLocation {
+									lat, lng, googlePlaceId
+								}
+								attachedRequests {
+									id
+								}
 							}
-						}
+						}`,
+					});
+
+					try {
+						const response = await fetch(process.env.VUE_APP_API_URL, {
+							headers: {
+								'content-type': 'application/json',
+							},
+							method: 'POST',
+							body: query,
+						});
+
+						const responseJson = await response.json();
+						commit('setMyTrips', responseJson.data.myTrips);
+						return true;
+					} catch (error) {
+						return false;
 					}
-				}`,
-      });
+				},
 
-      try {
-        await fetch(process.env.VUE_APP_API_URL, {
-          headers: {
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-          body: query,
-        });
+				async createRequest({ dispatch }, payload) {
+					const query = JSON.stringify({
+						query: `mutation {
+							createRequest(input:{
+								fromLocation: {
+									lat: ${payload.fromLocation.lat},
+									lng: ${payload.fromLocation.lng},
+									googlePlaceId: "${payload.fromLocation.googlePlaceId}",
+								}
+								toLocation: {
+									lat: ${payload.toLocation.lat},
+									lng: ${payload.toLocation.lng},
+									googlePlaceId: "${payload.toLocation.googlePlaceId}",
+								}
+								offeredPrice:{
+									amount: ${payload.offeredPrice.amount},
+									currencyCode: "${payload.offeredPrice.currencyCode}",
+								}
+								package:{
+									name: "${payload.package.name}",
+									description: "${payload.package.description}",
+									price:{
+										amount: ${payload.package.price.amount},
+										currencyCode: "${payload.package.price.currencyCode}"
+									}
+								}
+							}) {
+								id
+								status
+								offeredPrice {
+									amount, currencyCode
+								}
+								fromLocation {
+									lat, lng, googlePlaceId
+								}
+								toLocation {
+									lat, lng, googlePlaceId
+								}
+								package {
+									name
+									description
+									price {
+										amount, currencyCode
+									}
+								}
+							}
+						}`,
+					});
 
-        // const responseJson = await response.json();
-        await dispatch('getMyRequests');
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
+					try {
+						await fetch(process.env.VUE_APP_API_URL, {
+							headers: {
+								'content-type': 'application/json',
+							},
+							method: 'POST',
+							body: query,
+						});
 
-    async createTrip({ dispatch }, payload) {
-      const query = JSON.stringify({
-        query: `mutation {
-					createTrip(input:{
-						fromLocation: {
-							lat: ${payload.fromLocation.lat},
-							lng: ${payload.fromLocation.lng},
-							googlePlaceId: "${payload.fromLocation.googlePlaceId}",
-						}
-						toLocation: {
-							lat: ${payload.toLocation.lat},
-							lng: ${payload.toLocation.lng},
-							googlePlaceId: "${payload.toLocation.googlePlaceId}",
-						}
-						fromDate: ${payload.fromDate},
-						toDate: ${payload.toDate},
-					}) {
-						id
-						fromDate, toDate
-						fromLocation {
-							lat, lng, googlePlaceId
-						}
-						toLocation {
-							lat, lng, googlePlaceId
-						}
+						// const responseJson = await response.json();
+						await dispatch('getMyRequests');
+						return true;
+					} catch (error) {
+						return false;
 					}
-				}`,
-      });
+				},
 
-      try {
-        await fetch(process.env.VUE_APP_API_URL, {
-          headers: {
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-          body: query,
-        });
+				async createTrip({ dispatch }, payload) {
+					const query = JSON.stringify({
+						query: `mutation {
+							createTrip(input:{
+								fromLocation: {
+									lat: ${payload.fromLocation.lat},
+									lng: ${payload.fromLocation.lng},
+									googlePlaceId: "${payload.fromLocation.googlePlaceId}",
+								}
+								toLocation: {
+									lat: ${payload.toLocation.lat},
+									lng: ${payload.toLocation.lng},
+									googlePlaceId: "${payload.toLocation.googlePlaceId}",
+								}
+								fromDate: ${payload.fromDate},
+								toDate: ${payload.toDate},
+							}) {
+								id
+								fromDate, toDate
+								fromLocation {
+									lat, lng, googlePlaceId
+								}
+								toLocation {
+									lat, lng, googlePlaceId
+								}
+							}
+						}`,
+					});
 
-        await dispatch('getMyTrips');
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
-  },
-});
+					try {
+						await fetch(process.env.VUE_APP_API_URL, {
+							headers: {
+								'content-type': 'application/json',
+							},
+							method: 'POST',
+							body: query,
+						});
+
+						await dispatch('getMyTrips');
+						return true;
+					} catch (error) {
+						return false;
+					}
+				},
+			},
+		});
