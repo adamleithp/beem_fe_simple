@@ -8,11 +8,28 @@
 			<ul v-if="this.myRequests" class="list pa0 ma0 mb3">
 				<li v-for="(request) in this.myRequests" :key="request.id" class="mb3">
 					<div class="ba pa3">
-						<h3>name: {{request.package.name}}</h3>
-						<p>Status: {{request.status}}</p>
-						<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
-						<p><strong>address of requested item</strong>: <Place :placeId="request.fromLocation.googlePlaceId"/></p>
-						<p><strong>Needs delivery to</strong>: <Place :placeId="request.toLocation.googlePlaceId"/></p>
+						<div class="mb4">
+							<h3><strong>Name</strong>: {{request.package.name}}</h3>
+							<p><strong>Status</strong>: {{request.status}}</p>
+							<p><strong>Bounty</strong>: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
+							<p><strong>Address of requested item</strong>: <Place :placeId="request.fromLocation.googlePlaceId"/></p>
+							<p><strong>Needs delivery to</strong>: <Place :placeId="request.toLocation.googlePlaceId"/></p>
+						</div>
+
+						<div class="">
+							<h3>Counter Offers</h3>
+
+							<ul v-if="request.counterOffers" class="list pa0 ma0">
+								<li v-for="(counterOffers, index) in request.counterOffers" :key="counterOffers.id" class="mb3 ba pa3">
+									<!-- {{counterOffers.trip.id}} -->
+									<div class="mb3">Traveler {{index + 1}} offered: <strong>{{counterOffers.price.currencyCode}} {{counterOffers.price.amount}}</strong></div>
+									<div class="flex justify-between">
+										<button type="button">Accept Counter Offer</button>
+										<button type="submit">Decline Counter Offer</button>
+									</div>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</li>
 			</ul>

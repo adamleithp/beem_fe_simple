@@ -24,6 +24,21 @@
 
 				<p>you're making <strong>{{totalProfitOfTrip}}</strong></p>
 
+				<h3 v-if="!trip.counteredRequests.length">No Countered Requests:</h3>
+				<h3 v-if="trip.counteredRequests.length">Requests You've countered:</h3>
+
+				<ul class="list pa0 mb3" v-if="trip.counteredRequests.length">
+					<li v-for="(counteredRequest) in trip.counteredRequests" :key="counteredRequest.id" class="mb3">
+						<div class="ba pa3">
+							<h3>name: {{counteredRequest.request.package.name}}</h3>
+							<p>Cost of product: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.package.price.amount}}</p>
+							<p>Bounty: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.offeredPrice.amount}}</p>
+							<p>You've countered with: {{counteredRequest.price.amount}}</p>
+							<p>Status of counter offer: {{counteredRequest.counterStatus}}</p>
+						</div>
+					</li>
+				</ul>
+
 
 				<h3 v-if="!trip.attachedRequests.length">No accepted Requests:</h3>
 				<h3 v-if="trip.attachedRequests.length">Requests Accepted:</h3>
@@ -55,18 +70,19 @@
 			<h3>Requests offered:</h3>
 			<ul class="list pa0" v-if="requestForLocation">
 				<li v-for="(request) in requestForLocation" :key="request.id" class="mb3">
-					<div class="ba pa3" :class="isThisAttachedToTrip(request.id) ? 'o-30' : ''">
-						<h3>name: {{request.package.name}}</h3>
-						<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
-						<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
-						<div class="my3 flex justify-between" v-if="!isThisAttachedToTrip(request.id)">
-							<button @click="acceptRequestOffer(request.id)">Accept bounty of {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</button>
-							<button @click="counterRequestOffer(request.id)">Counter Offer</button>
-						</div>
-					</div>
+					<TripRequest
+						:request="request"
+						:tripId="trip.id"
+						:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
+						@requestChanged="getTrip()"/>
 				</li>
 			</ul>
 		</div>
+
+
+
+
+
 		<div v-else class="mw6 center">
 			<h3>No Requests for your destination</h3>
 			<p>Try adding stops on your trip! (idea)</p>
@@ -77,11 +93,13 @@
 <script>
 /* eslint-disable no-console */
 import Place from '@/components/Place.vue'
+import TripRequest from '@/components/TripRequest.vue'
 
 export default {
 	name: 'myTrip',
 	components: {
-		Place
+		Place,
+		TripRequest
 	},
 
 	data() {
@@ -89,6 +107,7 @@ export default {
 			trip: {},
 			requestForLocation: [],
 			loading: true,
+			counteringOfferId: null,
 		}
 	},
 
@@ -122,6 +141,9 @@ export default {
 					this.trip = trip;
 					this.loading = false;
 
+					console.log(trip);
+
+
 					// Get requests at trip destination location
 					this.$store.dispatch('getRequestsForLocation', this.trip.toLocation.googlePlaceId)
 						.then((requests) => {
@@ -132,6 +154,14 @@ export default {
 					this.$router.push({ name: 'home'})
 				})
 		},
+
+
+		// Is this request attached to trip? return true or false;
+		isThisAttachedToTrip(requestId) {
+			const attachedRequests = this.trip.attachedRequests.filter((request) => request.id === requestId)[0]
+			return (attachedRequests ? true : false)
+		},
+
 
 		formatDatetoYMD(unixTimeStamp) {
 			let d = new Date(unixTimeStamp * 1000),
@@ -146,31 +176,6 @@ export default {
 
 			return [year, month, day].join('-');
 		},
-
-		// Is this request attached to trip? return true or false;
-		isThisAttachedToTrip(requestId) {
-			const attachedRequests = this.trip.attachedRequests.filter((request) => request.id === requestId)[0]
-			return (attachedRequests ? true : false)
-		},
-
-
-		// Handle "Accept" click on button
-		async acceptRequestOffer(requestId) {
-			const tripObject = this.trip;
-			const thisRequest = this.requestForLocation.filter((request) => request.id === requestId)[0]
-
-			this.$store.dispatch('acceptRequestOnMyTrip', {
-				tripId: tripObject.id,
-				requestId: thisRequest.id
-			})
-				.then((trip) => {
-					this.trip = trip;
-				})
-		},
-
-		async counterRequestOffer(requestId) {
-			console.log('countered...', requestId);
-		}
 	},
 
 	mounted() {

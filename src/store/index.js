@@ -20,14 +20,18 @@ export default new Vuex.Store({
 	},
 	actions: {
 
-		async acceptRequestOnMyTrip(_, payload){
-			const {tripId, requestId} = payload;
+		async attachCounterOfferToRequest(_, payload){
+			const {tripId, requestId, counterOffer} = payload;
 
 			const query = JSON.stringify({
 				query: `mutation {
-					attachRequestToTrip(input:{
+					attachCounterOfferToRequest(input:{
 						tripId:"${tripId}",
 						requestId:"${requestId}"
+						counterOffer: {
+							currencyCode: "${counterOffer.currencyCode}"
+							amount: ${counterOffer.amount}
+						}
 					})
 					{
 						id
@@ -37,6 +41,13 @@ export default new Vuex.Store({
 						}
 						toLocation {
 							lat, lng, googlePlaceId
+						}
+						counteredRequests {
+							counterStatus
+							price {
+								currencyCode
+								amount
+							}
 						}
 						attachedRequests {
 							id
@@ -73,9 +84,75 @@ export default new Vuex.Store({
 				});
 
 				const responseJson = await response.json();
-				console.log('acceptRequestOnMyTrip TRIP', responseJson.data.attachRequestToTrip);
 
-				// commit('setMyRequests', responseJson.data.myRequests);
+				return responseJson.data.attachCounterOfferToRequest;
+			} catch (error) {
+				return false;
+			}
+		},
+
+
+		async acceptRequestOnMyTrip(_, payload){
+			const {tripId, requestId} = payload;
+
+			const query = JSON.stringify({
+				query: `mutation {
+					attachRequestToTrip(input:{
+						tripId:"${tripId}",
+						requestId:"${requestId}"
+					})
+					{
+						id
+						fromDate, toDate
+						fromLocation {
+							lat, lng, googlePlaceId
+						}
+						toLocation {
+							lat, lng, googlePlaceId
+						}
+						counteredRequests {
+							counterStatus
+							price {
+								currencyCode
+								amount
+							}
+						}
+						attachedRequests {
+							id
+							status
+							offeredPrice {
+								currencyCode
+								amount
+							}
+							toLocation {
+								lat, lng, googlePlaceId
+							}
+							fromLocation {
+								lat, lng, googlePlaceId
+							}
+							package {
+								name
+								description
+								price {
+									amount, currencyCode
+								}
+							}
+						}
+					}
+				}`,
+			});
+
+			try {
+				const response = await fetch(process.env.VUE_APP_API_URL, {
+					headers: {
+						'content-type': 'application/json',
+					},
+					method: 'POST',
+					body: query,
+				});
+
+				const responseJson = await response.json();
+
 				return responseJson.data.attachRequestToTrip;
 			} catch (error) {
 				return false;
@@ -100,8 +177,13 @@ export default new Vuex.Store({
 							lat, lng, googlePlaceId
 						}
 						counterOffers {
-							amount
-							currencyCode
+							trip {
+								id
+							}
+							price {
+								amount
+								currencyCode
+							}
 						}
 						package {
 							id
@@ -146,6 +228,33 @@ export default new Vuex.Store({
 							}
 							toLocation {
 								lat, lng, googlePlaceId
+							}
+							counteredRequests {
+								counterStatus
+								request {
+									id
+									status
+									offeredPrice {
+										amount, currencyCode
+									}
+									fromLocation {
+										lat, lng, googlePlaceId
+									}
+									toLocation {
+										lat, lng, googlePlaceId
+									}
+									package {
+										name
+										description
+										price {
+											amount, currencyCode
+										}
+									}
+								}
+								price {
+									currencyCode
+									amount
+								}
 							}
 							attachedRequests {
 								id
@@ -242,6 +351,13 @@ export default new Vuex.Store({
 								}
 								toLocation {
 									lat, lng, googlePlaceId
+								}
+								counteredRequests {
+									counterStatus
+									price {
+										currencyCode
+										amount
+									}
 								}
 								attachedRequests {
 									id

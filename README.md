@@ -1,4 +1,4 @@
-# beem_fe_simple
+# Simple
 
 ## Project setup
 ```
@@ -27,3 +27,61 @@ yarn run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+
+### TODO
+
+
+## MVP
+- [x] **Traveller**: Create Trip
+  - [x] Google API for location from
+  - [x] View Requests for location to
+- [x] **Requester**: Create Requst
+  - [x] Google API for location from
+  - [x] Google API for location to
+  - [x] Request Status to "Pending"
+  - [ ] Payment Form or Credit card
+- [x] **Traveller**: Accept Request to my trip
+  - [x] Request Status to "Accepted"
+- [ ] **Traveller**: Counter Request to my trip
+  - [ ] Request Status to "Countered"
+- [ ] **Requester**: Accept counter offer
+- [ ] **Requester**: Decline counter offer
+- [ ] **Traveller**: Update attached request status
+  - [ ] Status to "Purchased"
+  - [ ] Requester: their money is put in ESCRO
+  - [ ] status to "On the way" (after start date of trip)
+- [ ] **Traveller**: Generate QR code for request scan
+- [ ] **Requester**: Read QR code when traveller
+  - [ ] Request Status to "Delivered"
+- [ ] **Escro**
+  - [ ] Create mock API which shows transactions
+  - [ ] Charge requester - Move money out of requester ESCRO (charge requester)
+  - [ ] Pay traveller - Deliver money to traveller
+- [ ] **Authentication**
+  - [ ] Security
+- [ ] **Form Validation**
+  - [ ] All forms
+- [ ] **Deploy to production**
+
+## V2
+- [ ] **Website**
+  - [ ] How does it work (video?)
+  - [ ] What we do
+  - [ ] Why does this exist
+  - [ ] Help Center
+    - [ ] Automated Chat Bot
+    - [ ] Contact us
+    - [ ] Terms & Conditions
+      - [ ] Traveller
+      - [ ] Requester
+- [ ] Design / Redesign
+- [ ] Mobile Application (iOs/Android)
+- [ ] Traveller: Add multi-location trip
+- [ ] Traveller: Add dimension available for request
+- [ ] Requester: Set request dimensions
+- [ ] Traveller: Accept terms to create trip
+- [ ] Requester: Accept terms to create request
+

@@ -25,6 +25,11 @@ export default {
   color: #2c3e50;
 }
 
+// expand the flex item to it's fullest
+.flex-1 {
+	flex: 1;
+}
+
 #nav {
   padding: 30px;
 
