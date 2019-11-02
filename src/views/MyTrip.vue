@@ -3,24 +3,10 @@
     <div class="mw7 center">
 			<h3>Your trip:</h3>
 			<div class="ba pa3">
-				<div class="flex justify-between">
-					<div>
-						<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
-						<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
-					</div>
 
-					<div class="flex items-center justify-center" style="flex:1">
-						<div class="trip-animation" style="flex:1">
-							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10.18 9"/><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-						</div>
-					</div>
-
-					<div class="tr">
-						<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
-						<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
-					</div>
+				<div class="ba pa3">
+					<MyTrip :trip="trip"/>
 				</div>
-
 
 				<p>you're making <strong>{{totalProfitOfTrip}}</strong></p>
 
@@ -92,14 +78,14 @@
 
 <script>
 /* eslint-disable no-console */
-import Place from '@/components/Place.vue'
+import MyTrip from '@/components/MyTrip.vue'
 import TripRequest from '@/components/TripRequest.vue'
 
 export default {
-	name: 'myTrip',
+	name: 'myTripView',
 	components: {
-		Place,
-		TripRequest
+		MyTrip,
+		TripRequest,
 	},
 
 	data() {
@@ -141,9 +127,6 @@ export default {
 					this.trip = trip;
 					this.loading = false;
 
-					console.log(trip);
-
-
 					// Get requests at trip destination location
 					this.$store.dispatch('getRequestsForLocation', this.trip.toLocation.googlePlaceId)
 						.then((requests) => {
@@ -180,32 +163,13 @@ export default {
 
 	mounted() {
 		this.getTrip();
+
+		console.log('MyTrip: remove duplicates of same offer.. can only be one');
+
 	},
 }
 </script>
 
 <style lang="scss">
-	@keyframes slidein {
-		from {
-			transform: translateX(25%) rotate(90deg)
-		}
-		to {
-			transform: translateX(75%) rotate(90deg)
-		}
-	}
 
-	.trip-animation {
-		margin: 0 3em;
-		height: 3px;
-		position: relative;
-		background: #f7f7f7;
-
-		svg {
-			left: 40%;
-			top: -10px;
-			position: absolute;
-			animation: 2s infinite alternate slidein ease-in-out;
-			transform: rotate(90deg)
-		}
-	}
 </style>

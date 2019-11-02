@@ -7,41 +7,23 @@
 
 			<ul v-if="this.myRequests" class="list pa0 ma0 mb3">
 				<li v-for="(request) in this.myRequests" :key="request.id" class="mb3">
-					<div class="ba pa3">
-						<div class="mb4">
-							<h3><strong>Name</strong>: {{request.package.name}}</h3>
-							<p><strong>Status</strong>: {{request.status}}</p>
-							<p><strong>Bounty</strong>: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
-							<p><strong>Address of requested item</strong>: <Place :placeId="request.fromLocation.googlePlaceId"/></p>
-							<p><strong>Needs delivery to</strong>: <Place :placeId="request.toLocation.googlePlaceId"/></p>
-						</div>
-
-						<div class="">
-							<h3 v-if="request.counterOffers.length">Counter Offers</h3>
-
-							<ul v-if="request.counterOffers" class="list pa0 ma0">
-								<li v-for="(counterOffers, index) in request.counterOffers" :key="counterOffers.id" class="mb3 ba pa3">
-									<!-- {{counterOffers.trip.id}} -->
-									<div class="mb3">Traveler {{index + 1}} offered: <strong>{{counterOffers.price.currencyCode}} {{counterOffers.price.amount}}</strong></div>
-									<div class="flex justify-between">
-										<button type="button">Accept Counter Offer</button>
-										<button type="submit">Decline Counter Offer</button>
-									</div>
-								</li>
-							</ul>
-						</div>
-					</div>
+					<router-link :to="{ name: 'my-request', params: { id: request.id }}" class="card-link">
+						<MyRequest :request="request"/>
+					</router-link>
 				</li>
 			</ul>
 
 			<div class="mb3">
-				<button @click="() => isRequestFormVisible = !isRequestFormVisible">Create a request</button>
+				<button @click="() => isRequestFormVisible = !isRequestFormVisible">
+					{{isRequestFormVisible ? "Close form" : "Create a request"}}
+				</button>
 			</div>
 
 			<div v-if="isRequestFormVisible" class="my2 ba pa3 bg-near-white">
-				<RequestForm />
+				<RequestForm @requestCreated="isRequestFormVisible = false"/>
 			</div>
 		</div>
+
 
 		<div class="ba w-50 pa3">
 			<h2>User 2: Traveller</h2>
@@ -49,27 +31,22 @@
 			<h3>My Trips</h3>
 			<ul v-if="this.myTrips" class="list pa0 ma0 mb3">
 				<li v-for="(trip) in this.myTrips" :key="trip.id" class="mb3">
-					<router-link :to="{ name: 'my-trip', params: { id: trip.id }}">
-						<div class="ba pa3 flex justify-between">
-							<div>
-								<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
-								<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
-							</div>
-							<div class="tr">
-								<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
-								<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
-							</div>
+					<router-link :to="{ name: 'my-trip', params: { id: trip.id }}" class="card-link">
+						<div class="ba pa3">
+							<MyTrip :trip="trip"/>
 						</div>
 					</router-link>
 				</li>
 			</ul>
 
 			<div class="mb3">
-				<button @click="() => isTripFormVisible = !isTripFormVisible">Create a trip</button>
+				<button @click="() => isTripFormVisible = !isTripFormVisible">
+					{{isTripFormVisible ? "Close form" : "Create a trip"}}
+				</button>
 			</div>
 
 			<div v-if="isTripFormVisible" class="my2 ba pa3 bg-near-white">
-				<TripForm/>
+				<TripForm @tripCreated="isTripFormVisible = false"/>
 			</div>
 
 		</div>
@@ -79,16 +56,18 @@
 <script>
 /* eslint-disable no-console */
 import { mapState } from 'vuex';
+import MyRequest from '@/components/MyRequest.vue'
 import RequestForm from '@/components/RequestForm.vue'
+import MyTrip from '@/components/MyTrip.vue'
 import TripForm from '@/components/TripForm.vue'
-import Place from '@/components/Place.vue'
 
 export default {
 	name: 'home',
 	components: {
+		MyRequest,
 		RequestForm,
+		MyTrip,
 		TripForm,
-		Place
 	},
 	data() {
 		return {
@@ -106,35 +85,22 @@ export default {
 		this.$store.dispatch('getMyRequests')
 		this.$store.dispatch('getMyTrips')
 	},
-	methods: {
-		async handleRequestCreate() {
-			// Do validation...
-
-			// Call async action
-			this.$store.dispatch('createRequest', this.request)
-		},
-
-		formatDatetoYMD(unixTimeStamp) {
-			let d = new Date(unixTimeStamp * 1000),
-				month = '' + (d.getMonth()),
-				day = '' + d.getDate(),
-				year = d.getFullYear();
-
-			if (month.length < 2)
-				month = '0' + month;
-			if (day.length < 2)
-				day = '0' + day;
-
-			return [year, month, day].join('-');
-		}
-	}
 }
 
 </script>
 
 
 <style lang="scss">
+.card-link {
+	color: inherit;
+	display: block;
+	text-decoration: none;
+	box-shadow: 0px 4px 2px 3px #ccc;
 
+	&:hover {
+		box-shadow: 0px 4px 2px 1px #ccc;
+	}
+}
 
 </style>
 

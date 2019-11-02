@@ -1,0 +1,51 @@
+<template>
+  <div class="flex justify-between">
+		<div>
+			<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
+			<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
+		</div>
+
+		<div class="flex items-center justify-center" style="flex:1">
+			<div class="trip-animation" style="flex:1">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10.18 9"/><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+			</div>
+		</div>
+
+		<div class="tr">
+			<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
+			<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
+		</div>
+	</div>
+</template>
+
+<script>
+/* eslint-disable no-console */
+import Place from '@/components/Place.vue'
+
+export default {
+	name: 'MyTrip',
+	props: ['trip'],
+	components: {
+		Place,
+	},
+	methods: {
+		formatDatetoYMD(unixTimeStamp) {
+			let d = new Date(unixTimeStamp * 1000),
+				month = '' + (d.getMonth()),
+				day = '' + d.getDate(),
+				year = d.getFullYear();
+
+			if (month.length < 2)
+				month = '0' + month;
+			if (day.length < 2)
+				day = '0' + day;
+
+			return [year, month, day].join('-');
+		}
+	}
+}
+</script>
+
+<style lang="scss">
+
+</style>

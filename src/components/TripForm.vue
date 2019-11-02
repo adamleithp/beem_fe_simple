@@ -37,7 +37,7 @@
 			<input type="date" v-model="trip.toDateMeta" @change="handleFromDateChange('to')">
 		</div>
 
-		<button type="submit">create trip</button>
+		<button type="submit">Create Trip</button>
 	</form>
 </template>
 
@@ -111,15 +111,14 @@ export default {
 
 			// Assign to state
 			this.trip[whichLocationObject] = date;
-			console.log('this.trip', this.trip);
 		},
 
 		async handleTripCreate() {
-			console.log('this.trip', this.trip.toDate);
-			console.log('this.trip', this.trip.fromDate);
-
 			// Call async action
 			this.$store.dispatch('createTrip', this.trip)
+				.then(() => {
+						this.$emit('tripCreated');
+				})
 		},
 
 
@@ -140,8 +139,6 @@ export default {
 					return response.json();
 				})
 				.then((json) => {
-					console.log('json', json);
-
 					// Save for payload POST createTrip
 					this.trip[whichLocationObject].lat = json.result.geometry.location.lat;
 					this.trip[whichLocationObject].lng = json.result.geometry.location.lng;

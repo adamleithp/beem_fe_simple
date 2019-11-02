@@ -215,6 +215,63 @@ export default new Vuex.Store({
 			}
 		},
 
+
+		async getMyRequest(_, payload) {
+			const query = JSON.stringify({
+				query: `query {
+					myRequest(
+						id: "${payload}"
+					) {
+						id
+						status
+						offeredPrice{
+							currencyCode
+							amount
+						}
+						toLocation {
+							lat, lng, googlePlaceId
+						}
+						fromLocation {
+							lat, lng, googlePlaceId
+						}
+						counterOffers {
+							trip {
+								id
+							}
+							price {
+								amount
+								currencyCode
+							}
+						}
+						package {
+							id
+							name
+							description
+							price {
+								amount
+								currencyCode
+							}
+						}
+					}
+				}`,
+			});
+
+			try {
+				const response = await fetch(process.env.VUE_APP_API_URL, {
+					headers: {
+						'content-type': 'application/json',
+					},
+					method: 'POST',
+					body: query,
+				});
+
+				const responseJson = await response.json();
+				return responseJson.data.myRequest;
+			} catch (error) {
+				return false;
+			}
+		},
+
 		async getMyTrip(_, payload) {
 			const query = JSON.stringify({
 				query: `query {

@@ -65,7 +65,7 @@
 			</div>
 		</div>
 
-		<button type="submit">create request</button>
+		<button type="submit">Create Request</button>
 	</form>
 </template>
 
@@ -111,6 +111,9 @@ export default {
 		async handleRequestCreate() {
 			// Call async action
 			this.$store.dispatch('createRequest', this.request)
+				.then(() => {
+					this.$emit('requestCreated');
+				})
 		},
 
 

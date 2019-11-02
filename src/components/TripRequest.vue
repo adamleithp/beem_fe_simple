@@ -1,6 +1,6 @@
 <template>
   <div>
-		<div class="ba pa3" :class="isThisAttachedToTrip ? 'o-30' : ''">
+		<div class="ba pa3" :class="isThisAttachedToTrip ? 'dn' : ''">
 			<h3>name: {{request.package.name}}</h3>
 			<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
 			<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
@@ -85,6 +85,7 @@ export default {
 			})
 				.then((trip) => {
 					console.log('COUNTERED SUCCESSFUL... heres the trip', trip);
+					console.log('Trip Request >>> close form, and hide this request!');
 
 					this.$emit('requestChanged');
 				})

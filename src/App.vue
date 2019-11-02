@@ -43,6 +43,15 @@ export default {
   }
 }
 
+button {
+	height: 2.2em;
+	padding: 0 1.3em;
+	box-shadow: 0px 4px 4px 0px #ccc;
+	background: #42b983;
+	color: #fff;
+	font-weight: bold;
+	font-size: 1.1em;
+}
 input {
 	margin-bottom: 1em;
 	width: 100%;
@@ -71,4 +80,28 @@ label {
     padding: 0.5em 0.6em;
 	}
 }
+
+	@keyframes slidein {
+		from {
+			transform: translateX(25%) rotate(90deg)
+		}
+		to {
+			transform: translateX(75%) rotate(90deg)
+		}
+	}
+
+	.trip-animation {
+		margin: 0 3em;
+		height: 3px;
+		position: relative;
+		background: #f7f7f7;
+
+		svg {
+			left: 40%;
+			top: -10px;
+			position: absolute;
+			animation: 2s infinite alternate slidein ease-in-out;
+			transform: rotate(90deg)
+		}
+	}
 </style>
