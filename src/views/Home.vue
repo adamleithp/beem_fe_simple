@@ -17,7 +17,7 @@
 						</div>
 
 						<div class="">
-							<h3>Counter Offers</h3>
+							<h3 v-if="request.counterOffers.length">Counter Offers</h3>
 
 							<ul v-if="request.counterOffers" class="list pa0 ma0">
 								<li v-for="(counterOffers, index) in request.counterOffers" :key="counterOffers.id" class="mb3 ba pa3">
