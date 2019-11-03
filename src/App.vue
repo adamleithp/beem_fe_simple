@@ -112,7 +112,7 @@ label {
 		background: #f7f7f7;
 
 		svg {
-			left: 40%;
+			left: -6px;
 			top: -10px;
 			position: absolute;
 			animation: 2s infinite alternate slidein ease-in-out;

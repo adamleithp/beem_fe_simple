@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div class="my-trip" v-if="!loading">
     <div class="mw7 center">
 			<h3>Your trip:</h3>
 			<div class="ba pa3">

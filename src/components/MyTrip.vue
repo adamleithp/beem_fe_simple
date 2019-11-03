@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between">
-		<div>
+		<div class="w-40">
 			<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
 			<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
 		</div>
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 
-		<div class="tr">
+		<div class="w-40 tr">
 			<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
 			<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
 		</div>
