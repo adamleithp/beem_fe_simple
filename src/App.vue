@@ -52,6 +52,20 @@ button {
 	font-weight: bold;
 	font-size: 1.1em;
 	cursor: pointer;
+	position: relative;
+}
+.badge {
+	position: absolute;
+	top: 0.3em;
+	margin-left: 0.5em;
+	background: #4a6954;
+	color: white;
+	padding: 0.2em;
+	border-radius: 50%;
+	height: 1em;
+	width: 1em;
+	text-align: center;
+	line-height: 1.15em;
 }
 input {
 	margin-bottom: 1em;
@@ -105,4 +119,28 @@ label {
 			transform: rotate(90deg)
 		}
 	}
+
+.tabs {
+
+}
+.tabs__header {
+	button {
+		background: none;
+		box-shadow: none;
+		color: #000;
+		border: 0;
+		background: #e4e4e4;
+
+		&:focus {
+			z-index: 2;
+		}
+		&.tab--active {
+			background: #fff;
+			z-index: 1;
+		}
+	}
+}
+.tabs__content {
+
+}
 </style>

@@ -77,6 +77,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     - [ ] Terms & Conditions
       - [ ] Traveller
       - [ ] Requester
+- [ ] Save Google places name, only look up if location name is empty.
 - [ ] Design / Redesign
 - [ ] Mobile Application (iOs/Android)
 - [ ] Traveller: Add multi-location trip
