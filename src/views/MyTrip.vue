@@ -10,42 +10,60 @@
 
 				<p>you're making <strong>{{totalProfitOfTrip}}</strong></p>
 
-				<h3 v-if="!trip.counteredRequests.length">No Countered Requests:</h3>
-				<h3 v-if="trip.counteredRequests.length">Requests You've countered:</h3>
 
-				<ul class="list pa0 mb3" v-if="trip.counteredRequests.length">
-					<li v-for="(counteredRequest) in trip.counteredRequests" :key="counteredRequest.id" class="mb3">
-						<div class="ba pa3">
-							<h3>name: {{counteredRequest.request.package.name}}</h3>
-							<p>Cost of product: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.package.price.amount}}</p>
-							<p>Bounty: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.offeredPrice.amount}}</p>
-							<p>You've countered with: {{counteredRequest.price.amount}}</p>
-							<p>Status of counter offer: {{counteredRequest.counterStatus}}</p>
-						</div>
-					</li>
-				</ul>
+				<div class="ba pa3">
+					<h3 v-if="!attachedRequests.length">No accepted Requests:</h3>
+					<h3 v-if="attachedRequests.length">Requests Accepted:</h3>
 
+					<ul class="list pa0 mb3" v-if="attachedRequests.length">
+						<li v-for="(request) in attachedRequests" :key="request.id" class="mb3">
+							<!-- <div class="ba pa3">
+								<h3>name: {{request.package.name}}</h3>
+								<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
+								<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
+								<div class="my3" v-if="isThisAttachedToTrip(request.id)">
+									Update status here...
+									<select>
+										<option value="PURCHASED">Purchased item</option>
+										<option value="PICKED_UP">Picked up item</option>
+									</select>
+								</div>
+								<div v-else>Accepted Bounty of: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</div>
+							</div> -->
+							<TripRequest
+								:request="request"
+								context="attached"
+								:tripId="trip.id"
+								:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
+								:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
+								@requestChanged="getTrip()"/>
+						</li>
+					</ul>
+				</div>
 
-				<h3 v-if="!trip.attachedRequests.length">No accepted Requests:</h3>
-				<h3 v-if="trip.attachedRequests.length">Requests Accepted:</h3>
+				<div class="ba pa3">
+					<h3 v-if="!counteredRequests.length">No Countered Requests:</h3>
+					<h3 v-if="counteredRequests.length">Requests You've countered:</h3>
 
-				<ul class="list pa0 mb3" v-if="trip.attachedRequests.length">
-					<li v-for="(request) in trip.attachedRequests" :key="request.id" class="mb3">
-						<div class="ba pa3">
-							<h3>name: {{request.package.name}}</h3>
-							<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
-							<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
-							<div class="my3" v-if="isThisAttachedToTrip(request.id)">
-								Update status here...
-								<select>
-									<option value="PURCHASED">Purchased item</option>
-									<option value="PICKED_UP">Picked up item</option>
-								</select>
-							</div>
-							<div v-else>Accepted Bounty of: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</div>
-						</div>
-					</li>
-				</ul>
+					<ul class="list pa0 mb3" v-if="counteredRequests.length">
+						<li v-for="(counteredRequest) in counteredRequests" :key="counteredRequest.id" class="mb3">
+							<!-- <div class="ba pa3">
+								<h3>name: {{counteredRequest.request.package.name}}</h3>
+								<p>Cost of product: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.package.price.amount}}</p>
+								<p>Bounty: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.offeredPrice.amount}}</p>
+								<p>You've countered with: {{counteredRequest.price.currencyCode}} {{counteredRequest.price.amount}}</p>
+								<p>Status of counter offer: {{counteredRequest.counterStatus}}</p>
+							</div> -->
+							<TripRequest
+								:request="counteredRequest.request"
+								context="countered"
+								:tripId="trip.id"
+								:isThisAttachedToTrip="isThisAttachedToTrip(counteredRequest.request.id)"
+								:isThisCounteredToTrip="isThisCounteredToTrip(counteredRequest.request.id)"
+								@requestChanged="getTrip()"/>
+						</li>
+					</ul>
+				</div>
 
 			</div>
 
@@ -58,8 +76,10 @@
 				<li v-for="(request) in requestForLocation" :key="request.id" class="mb3">
 					<TripRequest
 						:request="request"
+						context="offered"
 						:tripId="trip.id"
 						:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
+						:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
 						@requestChanged="getTrip()"/>
 				</li>
 			</ul>
@@ -92,6 +112,8 @@ export default {
 		return {
 			trip: {},
 			requestForLocation: [],
+			attachedRequests: [],
+			counteredRequests: [],
 			loading: true,
 			counteringOfferId: null,
 		}
@@ -125,6 +147,8 @@ export default {
 			this.$store.dispatch('getMyTrip', this.$route.params.id)
 				.then((trip) => {
 					this.trip = trip;
+					this.counteredRequests = this.trip.counteredRequests;
+					this.attachedRequests = this.trip.attachedRequests;
 					this.loading = false;
 
 					// Get requests at trip destination location
@@ -138,11 +162,16 @@ export default {
 				})
 		},
 
-
 		// Is this request attached to trip? return true or false;
 		isThisAttachedToTrip(requestId) {
-			const attachedRequests = this.trip.attachedRequests.filter((request) => request.id === requestId)[0]
+			const attachedRequests = this.attachedRequests.filter((request) => request.id === requestId)[0]
 			return (attachedRequests ? true : false)
+		},
+
+		// Is this request countered by traveller? return true or false;
+		isThisCounteredToTrip(requestId) {
+			const counteredRequests = this.counteredRequests.filter((request) => request.request.id === requestId)[0]
+			return (counteredRequests ? true : false)
 		},
 
 
@@ -163,9 +192,6 @@ export default {
 
 	mounted() {
 		this.getTrip();
-
-		console.log('MyTrip: remove duplicates of same offer.. can only be one');
-
 	},
 }
 </script>

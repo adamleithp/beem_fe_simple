@@ -51,6 +51,7 @@ button {
 	color: #fff;
 	font-weight: bold;
 	font-size: 1.1em;
+	cursor: pointer;
 }
 input {
 	margin-bottom: 1em;

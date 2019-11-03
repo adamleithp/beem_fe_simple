@@ -1,10 +1,13 @@
 <template>
   <div>
-		<div class="ba pa3" :class="isThisAttachedToTrip ? 'dn' : ''">
+		<div
+			class="ba pa3"
+			v-if="shouldThisBeShown">
+
 			<h3>name: {{request.package.name}}</h3>
 			<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
 			<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
-			<div class="mv3 flex justify-between" v-if="!isThisAttachedToTrip && !isCountering">
+			<div class="mv3 flex justify-between" v-if="!isThisAttachedToTrip && !isThisCounteredToTrip && !isCountering">
 				<button @click="acceptRequestOffer()">Accept bounty of {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</button>
 				<button @click="showCounterRequestOfferForm()">Counter Offer</button>
 			</div>
@@ -47,8 +50,10 @@ export default {
 
 	props: [
 		'request',
+		'context',
 		'tripId',
-		'isThisAttachedToTrip'
+		'isThisAttachedToTrip',
+		'isThisCounteredToTrip',
 	],
 
 	data() {
@@ -111,6 +116,14 @@ export default {
 		async counterRequestOffer() {
 		}
 
+	},
+
+	computed: {
+		shouldThisBeShown() {
+			if (this.context !== 'attached' && this.isThisAttachedToTrip) return false;
+			if (this.context !== 'countered' && this.isThisCounteredToTrip) return false;
+			return true;
+		}
 	}
 }
 </script>
