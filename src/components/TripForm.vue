@@ -9,7 +9,7 @@
 				<!-- Click suggestion, fill value, if same remove -->
 				<ul class="location-suggestion-dropdown" v-if="showlocationSuggestionsDropdown === 'from'">
 					<li v-for="(suggestion) in this.locationSuggestions" :key="suggestion.id">
-						<button type="button" class="" :id="suggestion.place_id" @click="handleLocationSuggestionClick('from', suggestion)">{{suggestion.description}}</button>
+						<button type="button" class="" :id="suggestion.id" @click="handleLocationSuggestionClick('from', suggestion)">{{suggestion.description}}</button>
 					</li>
 				</ul>
 			</div>
@@ -27,7 +27,7 @@
 				<!-- Click suggestion, fill value, if same remove -->
 				<ul class="location-suggestion-dropdown" v-if="showlocationSuggestionsDropdown === 'to'">
 					<li v-for="(suggestion) in this.locationSuggestions" :key="suggestion.id">
-						<button type="button" class="" :id="suggestion.place_id" @click="handleLocationSuggestionClick('to', suggestion)">{{suggestion.description}}</button>
+						<button type="button" class="" :id="suggestion.id" @click="handleLocationSuggestionClick('to', suggestion)">{{suggestion.description}}</button>
 					</li>
 				</ul>
 			</div>
@@ -128,21 +128,18 @@ export default {
 
 			// save to local data
 			this.trip[whichLocationObject].meta = suggestion.description;
-			this.trip[whichLocationObject].googlePlaceId = suggestion.place_id;
+			this.trip[whichLocationObject].googlePlaceId = suggestion.id;
 
 			// hide dropdown
 			this.showlocationSuggestionsDropdown = null
 
-			// Get lng/lat from place_id
-			fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${suggestion.place_id}&fields=geometry&key=${process.env.VUE_APP_GOOGLE_API_KEY}`)
-				.then((response) => {
-					return response.json();
+			this.$store.dispatch('getLocationInformation', {
+				locationId: suggestion.id
+			})
+				.then((locationObject) => {
+					this.trip[whichLocationObject].lat = locationObject.lat;
+					this.trip[whichLocationObject].lng = locationObject.lng;
 				})
-				.then((json) => {
-					// Save for payload POST createTrip
-					this.trip[whichLocationObject].lat = json.result.geometry.location.lat;
-					this.trip[whichLocationObject].lng = json.result.geometry.location.lng;
-				});
 		},
 
 		// Autocomplete Google Places api and fill in dropdown (by context)
@@ -151,15 +148,16 @@ export default {
 			this.showlocationSuggestionsDropdown = context;
 
 			// determine which trip object to update depending on context passed.
-			let typeOfLookUp = 'geocode'
+			let typeOfLocationLookup = 'geocode'
 
-			fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${locationString}&types=${typeOfLookUp}&fields=photos,formatted_address,name,rating,opening_hours,geometry&language=en&key=${process.env.VUE_APP_GOOGLE_API_KEY}`)
-				.then((response) => {
-					return response.json();
+
+			this.$store.dispatch('getLocationSuggestions', {
+				locationString,
+				typeOfLocationLookup
+			})
+				.then((suggestions) => {
+					this.locationSuggestions = suggestions;
 				})
-				.then((json) => {
-					this.locationSuggestions = json.predictions;
-				});
 		}
 	},
 

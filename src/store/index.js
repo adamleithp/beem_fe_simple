@@ -550,5 +550,69 @@ export default new Vuex.Store({
 						return false;
 					}
 				},
+
+
+				async getLocationSuggestions(_, payload) {
+					const {locationString, typeOfLocationLookup} = payload;
+
+					const query = JSON.stringify({
+						query: `query {
+							getLocationSuggestions(
+								locationString: "${locationString}",
+								typeOfLocationLookup: "${typeOfLocationLookup}")
+							{
+								id
+								description
+							}
+						}`,
+					});
+
+					try {
+						const response = await fetch(process.env.VUE_APP_API_URL, {
+							headers: {
+								'content-type': 'application/json',
+							},
+							method: 'POST',
+							body: query,
+						});
+
+						// return response;
+						const responseJson = await response.json();
+						return responseJson.data.getLocationSuggestions;
+					} catch (error) {
+						return false;
+					}
+				},
+
+				async getLocationInformation(_, payload) {
+					const {locationId} = payload;
+
+					const query = JSON.stringify({
+						query: `query {
+							getLocationInformation(locationId:"${locationId}") {
+								lat
+								lng
+								googlePlaceId
+								formattedAddress,
+							}
+						}`,
+					});
+
+					try {
+						const response = await fetch(process.env.VUE_APP_API_URL, {
+							headers: {
+								'content-type': 'application/json',
+							},
+							method: 'POST',
+							body: query,
+						});
+
+						// return response;
+						const responseJson = await response.json();
+						return responseJson.data.getLocationInformation;
+					} catch (error) {
+						return false;
+					}
+				},
 			},
 		});
