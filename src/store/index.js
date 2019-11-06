@@ -19,6 +19,81 @@ export default new Vuex.Store({
 		},
 	},
 	actions: {
+		async acceptCounterOfferAsRequester(_, payload) {
+			const {tripId, requestId, counterRequestId} = payload;
+
+			console.log('tripId, requestId, counterRequestId', tripId, requestId, counterRequestId);
+
+
+			const query = JSON.stringify({
+				query: `mutation {
+					acceptCounterOfferAsRequester(input:{
+						tripId:"${tripId}",
+						requestId:"${requestId}"
+						counterRequestId: "${counterRequestId}"
+					}) {
+						id
+						status
+						offeredPrice{
+							currencyCode
+							amount
+						}
+						toLocation {
+							lat, lng, googlePlaceId
+						}
+						fromLocation {
+							lat, lng, googlePlaceId
+						}
+						trip {
+							id
+							fromDate, toDate
+							fromLocation {
+								lat, lng, googlePlaceId
+							}
+							toLocation {
+								lat, lng, googlePlaceId
+							}
+						}
+						counterOffers {
+							id
+							trip {
+								id
+							}
+							price {
+								amount
+								currencyCode
+							}
+						}
+						package {
+							id
+							name
+							description
+							price {
+								amount
+								currencyCode
+							}
+						}
+					}
+				}`,
+			});
+
+			try {
+				const response = await fetch(process.env.VUE_APP_API_URL, {
+					headers: {
+						'content-type': 'application/json',
+					},
+					method: 'POST',
+					body: query,
+				});
+
+				const responseJson = await response.json();
+				console.log('===== acceptCounterOfferAsRequester', responseJson);
+
+				return responseJson.data.acceptCounterOfferAsRequester;
+			} catch (error) {
+				return false;
+			}
+		},
 
 		async attachCounterOfferToRequest(_, payload){
 			const {tripId, requestId, counterOffer} = payload;
@@ -43,6 +118,7 @@ export default new Vuex.Store({
 							lat, lng, googlePlaceId
 						}
 						counteredRequests {
+							id
 							counterStatus
 							price {
 								currencyCode
@@ -111,6 +187,7 @@ export default new Vuex.Store({
 							lat, lng, googlePlaceId
 						}
 						counteredRequests {
+							id
 							counterStatus
 							price {
 								currencyCode
@@ -176,7 +253,18 @@ export default new Vuex.Store({
 						fromLocation {
 							lat, lng, googlePlaceId
 						}
+						trip {
+							id
+							fromDate, toDate
+							fromLocation {
+								lat, lng, googlePlaceId
+							}
+							toLocation {
+								lat, lng, googlePlaceId
+							}
+						}
 						counterOffers {
+							id
 							trip {
 								id
 							}
@@ -234,7 +322,18 @@ export default new Vuex.Store({
 						fromLocation {
 							lat, lng, googlePlaceId
 						}
+						trip {
+							id
+							fromDate, toDate
+							fromLocation {
+								lat, lng, googlePlaceId
+							}
+							toLocation {
+								lat, lng, googlePlaceId
+							}
+						}
 						counterOffers {
+							id
 							trip {
 								id
 							}
@@ -287,6 +386,7 @@ export default new Vuex.Store({
 								lat, lng, googlePlaceId
 							}
 							counteredRequests {
+								id
 								counterStatus
 								request {
 									id
@@ -410,6 +510,7 @@ export default new Vuex.Store({
 									lat, lng, googlePlaceId
 								}
 								counteredRequests {
+									id
 									counterStatus
 									price {
 										currencyCode

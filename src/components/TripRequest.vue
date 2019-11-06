@@ -1,19 +1,28 @@
 <template>
   <div>
 		<div
-			class="ba pa3"
+			class="ba flex"
 			v-if="shouldThisBeShown">
+			<div class="pa3 flex-grow-1">
+				<h3>name: {{request.package.name}}</h3>
+				<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
+				<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
+				<div class="mv3 flex justify-between" v-if="!isThisAttachedToTrip && !isThisCounteredToTrip && !isCountering">
+					<button @click="acceptRequestOffer()">Accept bounty of {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</button>
+					<button @click="showCounterRequestOfferForm()">Counter Offer</button>
+				</div>
+			</div>
 
-			<h3>name: {{request.package.name}}</h3>
-			<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
-			<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
-			<div class="mv3 flex justify-between" v-if="!isThisAttachedToTrip && !isThisCounteredToTrip && !isCountering">
-				<button @click="acceptRequestOffer()">Accept bounty of {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</button>
-				<button @click="showCounterRequestOfferForm()">Counter Offer</button>
+			<!-- qr code -->
+			<div class="bl pa3 w-30" v-if="context === 'attached'">
+				<p>When you meet up, have the requester scan this QR code to finish transaction.</p>
+				<img src="@/assets/qr-code.png" alt="">
 			</div>
 		</div>
-		<!-- Counter offer form  -->
 
+
+
+		<!-- Counter offer form  -->
 		<div class="bb br bl pa3" v-if="isCountering">
 			<h3>Counter offer</h3>
 			<p>How much are you suggesting they pay you to bring the requested item?</p>
@@ -88,10 +97,7 @@ export default {
 					currencyCode: this.counterOfferPrice.currencyCode,
 				}
 			})
-				.then((trip) => {
-					console.log('COUNTERED SUCCESSFUL... heres the trip', trip);
-					console.log('Trip Request >>> close form, and hide this request!');
-
+				.then(() => {
 					this.$emit('requestChanged');
 				})
 		},
@@ -101,7 +107,6 @@ export default {
 				console.log('cant be equal or lower than original offer');
 				return false;
 			}
-			console.log('countered...');
 			this.attachCounterOfferToRequest();
 		},
 

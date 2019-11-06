@@ -3,7 +3,7 @@
     <div class="mw7 center">
 			<h3>Your Request:</h3>
 			<div class="ba pa3">
-				<MyRequest :request="request"/>
+				<MyRequest @requestChanged="getRequest" :request="request"/>
 			</div>
 		</div>
   </div>
@@ -30,7 +30,6 @@ export default {
 		async getRequest() {
 			this.$store.dispatch('getMyRequest', this.$route.params.id)
 				.then((request) => {
-					console.log('request ->>> Get trip info if ACCEPTED...', request);
 					console.log('request ->>> show delete options, ONLY IF status=pending');
 
 					this.request = request;

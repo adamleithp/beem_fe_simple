@@ -8,12 +8,24 @@
 			<p><strong>Needs delivery to</strong>: <Place :placeId="request.toLocation.googlePlaceId"/></p>
 		</div>
 
-		<div class="">
+		<div v-if="thisRequestTrip">
+			<div class="pa3 ba">
+				<h4>Your package is arriving at...</h4>
+				<h3><Place :placeId="thisRequestTrip.toLocation.googlePlaceId"/> on {{formatDatetoYMD(thisRequestTrip.toDate)}}</h3>
+
+				<div v-if="context !== 'list-view'">
+					<p>When you meet up, have the traveller scan this QR code to finish transaction.</p>
+					<img src="@/assets/qr-code.png" alt="">
+				</div>
+			</div>
+		</div>
+
+		<div class="" v-if="context !== 'list-view' && !thisRequestTrip">
 			<h3 v-if="request.counterOffers.length">Counter Offers</h3>
 
-			<ul v-if="request.counterOffers" class="list pa0 ma0">
-				<li v-for="(counterOffers) in request.counterOffers" :key="counterOffers.id" class="mb3 ba pa3">
-					<RequestCounterOffer :counterOffer="counterOffers"/>
+			<ul v-if="thisRequestCounters" class="list pa0 ma0">
+				<li v-for="(counterOffers) in thisRequestCounters" :key="counterOffers.id" class="mb3 ba pa3">
+					<RequestCounterOffer @requestCounterChanged="handleRequestCounterChange" :requestId="request.id" :counterOffer="counterOffers"/>
 				</li>
 			</ul>
 		</div>
@@ -27,13 +39,48 @@ import RequestCounterOffer from '@/components/RequestCounterOffer.vue'
 
 export default {
 	name: 'MyRequest',
-	props: ['request'],
+	props: [
+		'request',
+		'context'
+	],
+	data() {
+		return {
+			counterOffers: [],
+			requestTrip: null
+		}
+	},
 	components: {
 		RequestCounterOffer,
 		Place,
 	},
+	computed: {
+		thisRequestTrip() {
+			if (this.request.trip) {
+				return this.request.trip
+			}
+			return null
+		},
+		thisRequestCounters() {
+			return this.request.counterOffers
+		}
+	},
 	methods: {
+		handleRequestCounterChange() {
+			this.$emit('requestChanged');
+		},
+		formatDatetoYMD(unixTimeStamp) {
+			let d = new Date(unixTimeStamp * 1000),
+				month = '' + (d.getMonth()),
+				day = '' + d.getDate(),
+				year = d.getFullYear();
 
+			if (month.length < 2)
+				month = '0' + month;
+			if (day.length < 2)
+				day = '0' + day;
+
+			return [year, month, day].join('-');
+		}
 	}
 }
 </script>

@@ -8,7 +8,7 @@
 			<ul v-if="this.myRequests" class="list pa0 ma0 mb3">
 				<li v-for="(request) in this.myRequests" :key="request.id" class="mb3">
 					<router-link :to="{ name: 'my-request', params: { id: request.id }}" class="card-link ba pa3">
-						<MyRequest :request="request"/>
+						<MyRequest :request="request" context="list-view"/>
 					</router-link>
 				</li>
 			</ul>
