@@ -107,6 +107,7 @@ export default {
 				console.log('cant be equal or lower than original offer');
 				return false;
 			}
+			this.hideCounterRequestOfferForm();
 			this.attachCounterOfferToRequest();
 		},
 
@@ -117,10 +118,6 @@ export default {
 		async hideCounterRequestOfferForm() {
 			this.isCountering = false
 		},
-
-		async counterRequestOffer() {
-		}
-
 	},
 
 	computed: {

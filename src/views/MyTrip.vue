@@ -103,31 +103,13 @@
 								</li>
 							</ul>
 						</div>
-					</div>
+					</div> <!--tabs__content-->
 
 				</div>
 			</div>
 		</div>
 
-		<!-- <div class="mw6 center pb5" v-if="requestForLocation.length >= 1">
-			<h3>Requests offered:</h3>
-			<ul class="list pa0" v-if="requestForLocation">
-				<li v-for="(request) in requestForLocation" :key="request.id" class="mb3">
-					<TripRequest
-						:request="request"
-						context="offered"
-						:tripId="trip.id"
-						:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
-						:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
-						@requestChanged="getTrip()"/>
-				</li>
-			</ul>
-		</div> -->
-
-
-
-
-<!--
+		<!--
 		<div v-else class="mw6 center">
 			<h3>No Requests for your destination</h3>
 			<p>Try adding stops on your trip! (idea)</p>

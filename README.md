@@ -47,7 +47,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   - [x] Request Status to "Accepted"
 - [x] **Traveller**: Counter Request to my trip
   - [x] Request Status to "Countered"
-- [ ] **Requester**: Accept counter offer (should just be accept with new price... or new endpoint?)
+- [x] **Requester**: Accept counter offer (should just be accept with new price... or new endpoint?)
 - [ ] **Requester**: Decline counter offer
 - [ ] **Traveller**: Update attached request status
   - [ ] Status to "Purchased"
