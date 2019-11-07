@@ -48,7 +48,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [x] **Traveller**: Counter Request to my trip
   - [x] Request Status to "Countered"
 - [x] **Requester**: Accept counter offer (should just be accept with new price... or new endpoint?)
-- [ ] **Requester**: Decline counter offer
+- [x] **Requester**: Decline counter offer
 - [ ] **Traveller**: Update attached request status
   - [ ] Status to "Purchased"
   - [ ] Requester: their money is put in ESCRO
@@ -56,7 +56,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - [ ] **Traveller**: Generate QR code for request scan
 - [ ] **Requester**: Read QR code when traveller
   - [ ] Request Status to "Delivered"
-- [ ] **Escro**
+- [ ] **Escrow**
   - [ ] Create mock API which shows transactions
   - [ ] Charge requester - Move money out of requester ESCRO (charge requester)
   - [ ] Pay traveller - Deliver money to traveller

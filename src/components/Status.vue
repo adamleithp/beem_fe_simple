@@ -2,7 +2,7 @@
   <span
 		:class="statusClass"
 		class="status">
-		[{{statusString}}]
+		{{statusString}}
 	</span>
 </template>
 

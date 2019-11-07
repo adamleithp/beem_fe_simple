@@ -79,7 +79,7 @@ label {
 	margin-bottom: .5em;
 }
 .status {
-	padding: 0.2em;
+	padding: 0.2em 0.5em;
 	border-radius: 5px;
 	border: 1px solid #ccc;
 	background: #ccc;

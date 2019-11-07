@@ -26,7 +26,7 @@
 						<button class="flex-grow-1"
 							:class="showTab === 'offered' ? 'tab--active':''"
 							@click="showTab = 'offered'">
-							Offered <span class="badge">{{requestForLocation.length}}</span>
+							All Offers <span class="badge">{{requestForLocation.length}}</span>
 						</button>
 					</div>
 
@@ -50,10 +50,12 @@
 										</div>
 										<div v-else>Accepted Bounty of: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</div>
 									</div> -->
+									{{request.counterStatus}}
 									<TripRequest
 										:request="request"
 										context="attached"
 										:tripId="trip.id"
+										:status="'ACCEPTED'"
 										:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
 										:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
 										@requestChanged="getTrip()"/>

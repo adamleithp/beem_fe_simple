@@ -6,7 +6,8 @@
 			<div class="pa3 flex-grow-1">
 				<h3>
 					name: {{request.package.name}}
-					<span v-if="status === 'REJECTED'"><Status :statusString="status"/>
+					<span v-if="status === 'REJECTED' || status === 'ACCEPTED'">
+						<Status :statusString="status"/>
 					</span>
 				</h3>
 				<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
@@ -132,8 +133,8 @@ export default {
 
 	computed: {
 		shouldThisBeShown() {
-			if (this.context !== 'attached' && this.isThisAttachedToTrip) return false;
-			if (this.context !== 'countered' && this.isThisCounteredToTrip) return false;
+			// if (this.context !== 'attached' && this.isThisAttachedToTrip) return false;
+			// if (this.context !== 'countered' && this.isThisCounteredToTrip) return false;
 			return true;
 		}
 	}
