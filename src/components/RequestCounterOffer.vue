@@ -3,7 +3,7 @@
 		<div class="mb3">Traveler offered: <strong>{{counterOffer.price.currencyCode}} {{counterOffer.price.amount}}</strong></div>
 		<div class="flex justify-between">
 			<button type="button" @click="handleAcceptRequestCounterOffer">Accept Counter Offer</button>
-			<button type="submit">(TODO) Decline Counter Offer</button>
+			<button type="submit" @click="handleDeclineRequestCounterOffer">(TODO) Decline Counter Offer</button>
 		</div>
 	</div>
 </template>
@@ -28,6 +28,17 @@ export default {
 
 		async handleAcceptRequestCounterOffer() {
 			this.$store.dispatch('acceptCounterOfferAsRequester', {
+				tripId: this.counterOffer.trip.id,
+				requestId: this.requestId,
+				counterRequestId: this.counterOffer.id
+			})
+				.then(() => {
+					this.$emit('requestCounterChanged');
+				})
+		},
+
+		async handleDeclineRequestCounterOffer() {
+			this.$store.dispatch('declineCounterOfferAsRequester', {
 				tripId: this.counterOffer.trip.id,
 				requestId: this.requestId,
 				counterRequestId: this.counterOffer.id

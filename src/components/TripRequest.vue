@@ -4,7 +4,11 @@
 			class="ba flex"
 			v-if="shouldThisBeShown">
 			<div class="pa3 flex-grow-1">
-				<h3>name: {{request.package.name}}</h3>
+				<h3>
+					name: {{request.package.name}}
+					<span v-if="status === 'REJECTED'"><Status :statusString="status"/>
+					</span>
+				</h3>
 				<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
 				<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
 				<div class="mv3 flex justify-between" v-if="!isThisAttachedToTrip && !isThisCounteredToTrip && !isCountering">
@@ -53,17 +57,23 @@
 
 <script>
 /* eslint-disable no-console */
+import Status from '@/components/Status.vue'
 
 export default {
 	name: 'TripRequest',
 
 	props: [
-		'request',
 		'context',
+		'request',
 		'tripId',
+		'status',
 		'isThisAttachedToTrip',
 		'isThisCounteredToTrip',
 	],
+
+	components: {
+		Status,
+	},
 
 	data() {
 		return {

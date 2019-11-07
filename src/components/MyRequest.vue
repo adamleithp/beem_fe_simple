@@ -1,7 +1,8 @@
 <template>
   <div class="my-request">
 		<div class="mb4">
-			<h3>{{request.package.name}} [{{request.status}}]</h3>
+			<h3>{{request.package.name}} <Status :statusString="request.status"/>
+			</h3>
 			<h3>{{request.package.description}}</h3>
 			<p>Offered <strong>{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</strong></p>
 			<p><strong>Address of requested item</strong>: <Place :placeId="request.fromLocation.googlePlaceId"/></p>
@@ -34,6 +35,7 @@
 
 <script>
 /* eslint-disable no-console */
+import Status from '@/components/Status.vue'
 import Place from '@/components/Place.vue'
 import RequestCounterOffer from '@/components/RequestCounterOffer.vue'
 
@@ -51,6 +53,7 @@ export default {
 	},
 	components: {
 		RequestCounterOffer,
+		Status,
 		Place,
 	},
 	computed: {

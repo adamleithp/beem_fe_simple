@@ -78,6 +78,23 @@ label {
 	display: block;
 	margin-bottom: .5em;
 }
+.status {
+	padding: 0.2em;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	background: #ccc;
+	color: #fff;
+}
+.status--accepted {
+	background: #3b923e;
+}
+.status--rejected {
+	background: #da4646;
+}
+.status--pending {
+	background: #a9a9a9;
+}
+
 
 .location-suggestion-dropdown {
 	padding: 0;

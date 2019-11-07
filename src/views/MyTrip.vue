@@ -79,6 +79,7 @@
 										:request="counteredRequest.request"
 										context="countered"
 										:tripId="trip.id"
+										:status="counteredRequest.counterStatus"
 										:isThisAttachedToTrip="isThisAttachedToTrip(counteredRequest.request.id)"
 										:isThisCounteredToTrip="isThisCounteredToTrip(counteredRequest.request.id)"
 										@requestChanged="getTrip()"/>
