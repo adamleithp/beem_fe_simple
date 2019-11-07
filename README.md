@@ -49,6 +49,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   - [x] Request Status to "Countered"
 - [x] **Requester**: Accept counter offer (should just be accept with new price... or new endpoint?)
 - [x] **Requester**: Decline counter offer
+- [ ] **Requester**: If request is over XX$, show credit card form (and charge)
 - [ ] **Traveller**: Update attached request status
   - [ ] Status to "Purchased"
   - [ ] Requester: their money is put in ESCRO

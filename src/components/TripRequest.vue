@@ -20,11 +20,21 @@
 
 			<!-- qr code -->
 			<div class="bl pa3 w-30" v-if="context === 'attached'">
+				<div class="mb4">
+					<h4 class="mt0 mb2">Update status here...</h4>
+					<select class="w-100">
+						<option value="PENDING_PICKUP">Pending Pickup</option>
+						<option value="PURCHASED">Purchased item</option>
+						<option value="PICKED_UP">Picked up item</option>
+						<option value="ARRIVED">Arrived</option>
+						<option value="DELIVERED">Delivered</option>
+					</select>
+				</div>
+
 				<p>When you meet up, have the requester scan this QR code to finish transaction.</p>
 				<img src="@/assets/qr-code.png" alt="">
 			</div>
 		</div>
-
 
 
 		<!-- Counter offer form  -->

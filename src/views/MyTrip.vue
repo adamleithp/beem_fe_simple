@@ -37,20 +37,7 @@
 
 							<ul class="list pa0" v-if="attachedRequests.length">
 								<li v-for="(request) in attachedRequests" :key="request.id" class="mb3">
-									<!-- <div class="ba pa3">
-										<h3>name: {{request.package.name}}</h3>
-										<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
-										<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
-										<div class="my3" v-if="isThisAttachedToTrip(request.id)">
-											Update status here...
-											<select>
-												<option value="PURCHASED">Purchased item</option>
-												<option value="PICKED_UP">Picked up item</option>
-											</select>
-										</div>
-										<div v-else>Accepted Bounty of: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</div>
-									</div> -->
-									{{request.counterStatus}}
+
 									<TripRequest
 										:request="request"
 										context="attached"

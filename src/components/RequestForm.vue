@@ -3,13 +3,15 @@
 		<!-- create package -->
 		<div class="mb3">
 			<h3>Package</h3>
-			<div>
-				<label><strong>Package Name</strong></label>
-				<input type="text" placeholder="package name" v-model="request.package.name">
-			</div>
-			<div>
-				<label><strong>Package Description</strong></label>
-				<input type="text" placeholder="package description" v-model="request.package.description">
+			<div class="mb3">
+				<div>
+					<label><strong>Package Name</strong></label>
+					<input type="text" placeholder="package name" v-model="request.package.name">
+				</div>
+				<div>
+					<label><strong>Package Description</strong></label>
+					<input type="text" placeholder="package description" v-model="request.package.description">
+				</div>
 			</div>
 			<div>
 				<label><strong>Location requested from</strong></label>
@@ -30,8 +32,6 @@
 		</div>
 
 		<div class="mb3">
-			<h3>Request</h3>
-
 			<div>
 				<label><strong>Need it delivered to</strong>:</label>
 				<!-- Click suggestion, fill value, if same remove -->
