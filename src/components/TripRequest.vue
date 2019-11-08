@@ -4,14 +4,32 @@
 			class="ba flex"
 			v-if="shouldThisBeShown">
 			<div class="pa3 flex-grow-1">
-				<h3>
-					name: {{request.package.name}}
-					<span v-if="status === 'REJECTED' || status === 'ACCEPTED'">
-						<Status :statusString="status"/>
-					</span>
-				</h3>
-				<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
-				<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
+
+				<div class="label-group">
+					<p class="label">Package Name</p>
+					<h3 class="title">{{request.package.name}}
+						<span v-if="status === 'REJECTED' || status === 'ACCEPTED'">
+							<Status :statusString="status"/>
+						</span>
+					</h3>
+				</div>
+				<div class="label-group">
+					<p class="label">Package Description</p>
+					<h3 class="title">{{request.package.description}}</h3>
+				</div>
+
+				<div class="flex">
+					<div class="label-group mr4">
+						<p class="label">Package Cost</p>
+						<h3 class="title">{{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</h3>
+					</div>
+
+					<div class="label-group">
+						<p class="label">Request Bounty</p>
+						<h3 class="title">{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</h3>
+					</div>
+				</div>
+
 				<div class="mv3 flex justify-between" v-if="!isThisAttachedToTrip && !isThisCounteredToTrip && !isCountering">
 					<button @click="acceptRequestOffer()">Accept bounty of {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</button>
 					<button @click="showCounterRequestOfferForm()">Counter Offer</button>
@@ -39,12 +57,16 @@
 
 		<!-- Counter offer form  -->
 		<div class="bb br bl pa3" v-if="isCountering">
-			<h3>Counter offer</h3>
-			<p>How much are you suggesting they pay you to bring the requested item?</p>
+			<div class="mb4">
+				<h3>Counter offer</h3>
+				<p>How much are you suggesting they pay you to bring the requested item?</p>
+			</div>
 			<form @submit.prevent="handleCounterOfferFormSubmit">
 				<div class="flex justify-between">
-					<p>Their original offer:</p>
-					<p><strong>{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</strong></p>
+					<div class="label-group">
+						<p class="label">Their original offer</p>
+						<h3 class="title">{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</h3>
+					</div>
 				</div>
 				<div class="flex justify-between">
 					<div class="w-70">

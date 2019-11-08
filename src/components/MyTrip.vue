@@ -1,8 +1,14 @@
 <template>
   <div class="flex justify-between">
 		<div class="w-40">
-			<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
-			<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
+			<div class="label-group">
+				<p class="label">From Location</p>
+				<h3 class="title"><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
+			</div>
+			<div class="label-group">
+				<p class="label">Date</p>
+				<h3 class="title">{{formatDatetoYMD(trip.fromDate)}}</h3>
+			</div>
 		</div>
 
 		<div class="flex items-center justify-center" style="flex:1">
@@ -12,8 +18,14 @@
 		</div>
 
 		<div class="w-40 tr">
-			<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
-			<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
+			<div class="label-group">
+				<p class="label">To Location</p>
+				<h3 class="title"><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
+			</div>
+			<div class="label-group">
+				<p class="label">Date</p>
+				<h3 class="title">{{formatDatetoYMD(trip.toDate)}}</h3>
+			</div>
 		</div>
 	</div>
 </template>

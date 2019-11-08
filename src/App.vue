@@ -25,6 +25,14 @@ export default {
   color: #2c3e50;
 }
 
+p, label, input, .status {
+	font-family: 'Open Sans', sans-serif;
+}
+h1,h2,h3,h4,h5 {
+	line-height: 1.5;
+	font-family: 'Merriweather', serif;
+}
+
 // expand the flex item to it's fullest
 .flex-1 {
 	flex: 1;
@@ -79,7 +87,7 @@ label {
 	margin-bottom: .5em;
 }
 .status {
-	padding: 0.2em 0.5em;
+	padding: 0em 0.5em 0.1em;
 	border-radius: 5px;
 	border: 1px solid #ccc;
 	background: #ccc;
@@ -94,6 +102,20 @@ label {
 .status--pending {
 	background: #a9a9a9;
 }
+
+.label-group {
+	.label {
+		margin-bottom: 5px;
+		margin-top: 5px;
+		font-size: 13px;
+		color: #828282;
+		display: block;
+	}
+	.title {
+		margin-top: 0;
+	}
+}
+
 
 
 .location-suggestion-dropdown {

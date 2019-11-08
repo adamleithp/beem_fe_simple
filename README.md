@@ -49,7 +49,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
   - [x] Request Status to "Countered"
 - [x] **Requester**: Accept counter offer (should just be accept with new price... or new endpoint?)
 - [x] **Requester**: Decline counter offer
-- [ ] **Requester**: If request is over XX$, show credit card form (and charge)
+- [ ] **Requester**: If request is over XX$, show credit card form (and charge) or stipe for all requests...
 - [ ] **Traveller**: Update attached request status
   - [ ] Status to "Purchased"
   - [ ] Requester: their money is put in ESCRO
@@ -80,10 +80,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
       - [ ] Requester
 - [ ] Save Google places name, only look up if location name is empty.
 - [ ] Design / Redesign
-- [ ] Mobile Application (iOs/Android)
+- [ ] Mobile Application (iOs/Android) or pwa
 - [ ] Traveller: Add multi-location trip
 - [ ] Traveller: Add dimension available for request
 - [ ] Requester: Set request dimensions
 - [ ] Traveller: Accept terms to create trip
 - [ ] Requester: Accept terms to create request
+- [ ] account page for location (home, travel distance prefference)
 

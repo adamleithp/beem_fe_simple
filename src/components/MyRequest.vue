@@ -1,12 +1,30 @@
 <template>
   <div class="my-request">
 		<div class="mb4">
-			<h3>{{request.package.name}} <Status :statusString="request.status"/>
-			</h3>
-			<h3>{{request.package.description}}</h3>
-			<p>Offered <strong>{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</strong></p>
-			<p><strong>Address of requested item</strong>: <Place :placeId="request.fromLocation.googlePlaceId"/></p>
-			<p><strong>Needs delivery to</strong>: <Place :placeId="request.toLocation.googlePlaceId"/></p>
+			<div class="label-group">
+				<p class="label">Package Name</p>
+				<h3 class="title">{{request.package.name}} <Status :statusString="request.status"/></h3>
+			</div>
+
+			<div class="label-group">
+				<p class="label">Request Description</p>
+				<h3 class="title">{{request.package.description}}</h3>
+			</div>
+
+			<div class="label-group">
+				<p class="label">Request Offer</p>
+				<h3 class="title">{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</h3>
+			</div>
+
+			<div class="label-group">
+				<p class="label">Requested from location</p>
+				<h3 class="title"><Place :placeId="request.fromLocation.googlePlaceId"/></h3>
+			</div>
+
+			<div class="label-group">
+				<p class="label">Requested to location</p>
+				<h3 class="title"><Place :placeId="request.toLocation.googlePlaceId"/></h3>
+			</div>
 		</div>
 
 		<div v-if="thisRequestTrip">

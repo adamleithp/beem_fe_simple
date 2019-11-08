@@ -11,8 +11,8 @@
 				<p>you're making <strong>{{totalProfitOfTrip}}</strong></p>
 
 
-				<div class="tabs">
-					<div class="tabs__header bt bl br flex">
+				<div class="tabs ba">
+					<div class="tabs__header flex">
 						<button class="flex-grow-1"
 							:class="showTab === 'attached' ? 'tab--active':''"
 							@click="showTab = 'attached'">
@@ -31,7 +31,7 @@
 					</div>
 
 					<div class="tabs__content">
-						<div class="bl bb br pa3" v-if="showTab === 'attached'">
+						<div class="pa3" v-if="showTab === 'attached'">
 							<h3 v-if="!attachedRequests.length">No accepted Requests:</h3>
 							<h3 v-if="attachedRequests.length">Requests Accepted:</h3>
 
@@ -51,7 +51,7 @@
 						</div>
 
 
-						<div class="bl bb br pa3" v-if="showTab === 'countered'">
+						<div class="pa3" v-if="showTab === 'countered'">
 							<h3 v-if="!counteredRequests.length">No Countered Requests:</h3>
 							<h3 v-if="counteredRequests.length">Requests You've countered:</h3>
 
@@ -77,7 +77,7 @@
 						</div>
 
 
-						<div class="bl bb br pa3" v-if="showTab === 'offered'">
+						<div class="pa3" v-if="showTab === 'offered'">
 							<h3 v-if="!requestForLocation.length">No Requests offered:</h3>
 							<h3 v-if="requestForLocation.length">Requests offered:</h3>
 
