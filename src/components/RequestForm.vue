@@ -102,6 +102,31 @@ export default {
 						currencyCode: 'USD'
 					}
 				},
+				// Backup full
+				// offeredPrice: {
+				// 	amount: 0,
+				// 	currencyCode: 'USD'
+				// },
+				// fromLocation: {
+				// 	meta: '',
+				// 	googlePlaceId: '',
+				// 	lat: 0,
+				// 	lng: 0
+				// },
+				// toLocation: {
+				// 	meta: '',
+				// 	googlePlaceId: '',
+				// 	lat: 0,
+				// 	lng: 0
+				// },
+				// package: {
+				// 	name: '',
+				// 	description: '',
+				// 	price: {
+				// 		amount: 0,
+				// 		currencyCode: 'USD'
+				// 	}
+				// },
 			},
 		}
 	},

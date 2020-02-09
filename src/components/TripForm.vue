@@ -95,6 +95,25 @@ export default {
 
 				toDateMeta: formatDatetoYMD(new Date),
 				fromDateMeta: formatDatetoYMD(new Date),
+
+				// Backup full
+				// fromLocation: {
+				// 	meta: '',
+				// 	googlePlaceId: '',
+				// 	lat: 0,
+				// 	lng: 9
+				// },
+				// toLocation: {
+				// 	meta: '',
+				// 	googlePlaceId: '',
+				// 	lat: 0,
+				// 	lng: 0
+				// },
+				// fromDate: parseDateFromYMD(formatDatetoYMD(new Date)), // lol
+				// toDate: parseDateFromYMD(formatDatetoYMD(new Date)),// lol
+
+				// toDateMeta: formatDatetoYMD(new Date),
+				// fromDateMeta: formatDatetoYMD(new Date),
 			},
 		}
 	},
