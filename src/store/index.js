@@ -7,6 +7,10 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
+		appMessage: {
+			title: '',
+			message: ''
+		}, 
 		myRequests: [],
 		myTrips: [],
 	},
@@ -17,8 +21,25 @@ export default new Vuex.Store({
 		setMyTrips(state, array) {
 			state.myTrips = array;
 		},
+		setAppMessage(state, {title, message}) {
+			state.appMessage = {title, message};
+		},
 	},
 	actions: {
+
+		showAppMessage({commit}, {title, message}) {			
+			commit('setAppMessage', {title, message});
+
+			setTimeout(() => {
+				commit('setAppMessage', {
+					title: '',
+					message: ''
+				});
+				return true;
+			}, 2500);
+		},
+
+
 		async acceptCounterOfferAsRequester(_, payload) {
 			const {tripId, requestId, counterRequestId} = payload;
 
@@ -713,7 +734,7 @@ export default new Vuex.Store({
 					});
 
 					try {
-						await fetch(process.env.VUE_APP_API_URL, {
+						const response = await fetch(process.env.VUE_APP_API_URL, {
 							headers: {
 								'content-type': 'application/json',
 							},
@@ -721,8 +742,9 @@ export default new Vuex.Store({
 							body: query,
 						});
 
+						const responseJson = await response.json();						
 						await dispatch('getMyTrips');
-						return true;
+						return responseJson.data.createTrip;
 					} catch (error) {
 						return false;
 					}

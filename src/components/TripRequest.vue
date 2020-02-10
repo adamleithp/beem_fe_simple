@@ -10,10 +10,10 @@
 						<Status :statusString="status"/>
 					</span>
 				</h3>
-				<p>Cost of product: {{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
-				<p>Bounty: {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
+				<p>Cost of product: <Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.package.price.amount}}</p>
+				<p>Bounty: <Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.offeredPrice.amount}}</p>
 				<div class="mv3 flex justify-between" v-if="!isThisAttachedToTrip && !isThisCounteredToTrip && !isCountering">
-					<button @click="acceptRequestOffer()">Accept bounty of {{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</button>
+					<button @click="acceptRequestOffer()">Accept bounty of <Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.offeredPrice.amount}}</button>
 					<button @click="showCounterRequestOfferForm()">Counter Offer</button>
 				</div>
 			</div>
@@ -44,7 +44,7 @@
 			<form @submit.prevent="handleCounterOfferFormSubmit">
 				<div class="flex justify-between">
 					<p>Their original offer:</p>
-					<p><strong>{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</strong></p>
+					<p><strong><Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.offeredPrice.amount}}</strong></p>
 				</div>
 				<div class="flex justify-between">
 					<div class="w-70">
@@ -52,7 +52,7 @@
 					</div>
 					<div class="w-30">
 						<div class="flex items-center">
-							<span class="mr2">{{request.offeredPrice.currencyCode}}</span>
+							<span class="mr2"><Currency :currencyCode="request.offeredPrice.currencyCode"/></span>
 							<input class="ma0" type="number" v-model="counterOfferPrice.amount" :min="Number(request.offeredPrice.amount)">
 						</div>
 					</div>
@@ -69,6 +69,7 @@
 <script>
 /* eslint-disable no-console */
 import Status from '@/components/Status.vue'
+import Currency from '@/components/Currency.vue'
 
 export default {
 	name: 'TripRequest',
@@ -84,6 +85,7 @@ export default {
 
 	components: {
 		Status,
+		Currency,
 	},
 
 	data() {

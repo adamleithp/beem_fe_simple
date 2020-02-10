@@ -1,19 +1,16 @@
 <template>
-  <div class="flex justify-between">
-		<div class="w-40">
-			<h3><Place :placeId="trip.fromLocation.googlePlaceId"/></h3>
-			<h3>{{formatDatetoYMD(trip.fromDate)}}</h3>
-		</div>
+  <div class="flex">
 
-		<div class="flex items-center justify-center" style="flex:1">
-			<div class="trip-animation" style="flex:1">
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10.18 9"/><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+		<div class="medium-block box flex items-center">
+			<div>
+				<div class="flex">
+					<!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M10.18 9"/><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/><path d="M0 0h24v24H0z" fill="none"/></svg> -->
+					<h5 class="ma0 mb2"><Place :placeId="trip.fromLocation.googlePlaceId"/></h5> 
+					<span class="mh3">→</span>
+					<h5 class="ma0 mb2"><Place :placeId="trip.toLocation.googlePlaceId"/></h5>
+				</div>
+				<h6 class="ma0 mt0">{{formatDatetoYMD(trip.fromDate)}}</h6>
 			</div>
-		</div>
-
-		<div class="w-40 tr">
-			<h3><Place :placeId="trip.toLocation.googlePlaceId"/></h3>
-			<h3>{{formatDatetoYMD(trip.toDate)}}</h3>
 		</div>
 	</div>
 </template>

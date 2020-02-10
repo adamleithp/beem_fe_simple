@@ -1,18 +1,39 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+
+
+    <div id="nav" >
+      <router-link to="/">🏠</router-link> 
+      <!-- <router-link to="/about">About</router-link> | -->
+      <router-link to="/trips">Trips</router-link>  
+      <router-link to="/requests">Requests</router-link>
     </div>
     <router-view/>
+
+
+		<div class="modal modal--center" v-if="this.appMessage.title !== ''">
+			<div class="modal-overlay"></div>
+			<div class="modal-content my2 pa3 bg-near-white flex items-center">
+				<div class="app-width center">
+					<h1 class="ma0 mb2">{{this.appMessage.title}}</h1>
+					<h4 class="ma0">{{this.appMessage.message}}</h4>
+				</div>
+			</div>
+		</div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import 'tachyons';
 
 export default {
-  name: 'app',
+	name: 'app',
+	computed: {
+		...mapState({
+			appMessage: state => state.appMessage,
+		}),
+	},
 }
 </script>
 
@@ -23,6 +44,13 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+	max-width: 400px;
+	// border: 1px solid #ccc;
+	margin: 0 auto
+}
+
+.app-width {
+	max-width: 400px;
 }
 
 // expand the flex item to it's fullest
@@ -31,10 +59,14 @@ export default {
 }
 
 #nav {
-  padding: 30px;
+  padding: 30px 0;
+
 
   a {
+		font-size: 1.1em;
+		margin-right: 10px;
     font-weight: bold;
+		text-decoration: none;
     color: #2c3e50;
 
     &.router-link-exact-active {
@@ -44,15 +76,15 @@ export default {
 }
 
 button {
-	height: 2.2em;
-	padding: 0 1.3em;
-	box-shadow: 0px 4px 4px 0px #ccc;
-	background: #42b983;
-	color: #fff;
-	font-weight: bold;
-	font-size: 1.1em;
-	cursor: pointer;
-	position: relative;
+	// height: 2.2em;
+	// padding: 0 1.3em;
+	// box-shadow: 0px 4px 4px 0px #ccc;
+	// background: #42b983;
+	// color: #fff;
+	// font-weight: bold;
+	// font-size: 1.1em;
+	// cursor: pointer;
+	// position: relative;
 }
 .badge {
 	position: absolute;
@@ -105,11 +137,24 @@ label {
 	left: 0;
 	width: 100%;
 	z-index: 1;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	border-radius: 0 0 15px 15px;
+	overflow: hidden;
 
+	li {
+		border-bottom: 1px solid #ccc;
+		&:last-child {
+			border-bottom: 0;
+		}
+	}
 	button {
 		width: 100%;
     text-align: left;
     padding: 0.5em 0.6em;
+
+		
 	}
 }
 
@@ -160,4 +205,151 @@ label {
 .tabs__content {
 
 }
+
+
+button {
+	border: 0;
+	cursor: pointer;
+}
+.logo {
+	height: 30px;
+	width: 30px;
+	background: #333;
+	// float: left;
+	margin: 0 10px 0 0;
+}
+p {
+	line-height: 1.5;
+}
+
+.text--info {
+	color: #979797;
+	font-size: .9em;
+}
+
+.big-block {
+	width: 100%;
+	height: 183px;
+	font-size: 1.3em;
+	
+}
+.medium-block {
+	width: 100%;
+	height: 93px;
+	font-size: 1.1em;
+}
+.small-block {
+	width: 100%;
+	// height: 183px;
+	font-size: 1.1em;
+}
+.box {
+	border-radius: 15px;
+	background: #333;
+	color: #fff;
+	padding: 1rem;
+
+	&:hover {
+		background: #444;
+	}
+}
+	.box--light {
+		background: #fff;
+		color: #979797;
+		border: 1px solid #979797;
+
+		&:hover {
+			background: #f3f3f3;
+		}
+	}
+		.box--light--active {
+			background: #fff;
+			color: #333;
+			border: 1px solid #333;
+		}
+
+
+.modal-overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	z-index: 1;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: .5;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@keyframes modalPopIn {
+	from {
+		transform: scale(1.1)
+	}
+	to {
+		transform: scale(1)
+	}
+}
+@keyframes modalBottomSlideUp {
+	from {
+		transform: translateY(100%)
+	}
+	to {
+		transform: translateY(0%) 
+	}
+}
+.modal {
+	position: fixed;
+}
+
+.modal--center {
+	width: 100%;
+	left: 0;
+	bottom: 0%;
+	top: 0%;
+	left: 0;
+	right:0;
+	// height: 70%;
+	overflow: scroll;
+	height: 100vh;
+	animation: .3s .1s alternate modalPopIn ease-in-out;
+
+	.modal-content {
+		height: 100vh;
+
+		h1 {
+			animation: .3s alternate fadeIn ease-in-out;
+		}
+		h4 {
+			animation: .3s .1s alternate fadeIn ease-in-out;
+		}
+	}
+}
+.modal--bottom {
+	width: 100%;
+	left: 0;
+	bottom: 0%;
+	// height: 70%;
+	overflow: scroll;
+	height: 65vh;
+	animation: .3s alternate modalBottomSlideUp ease-in-out;
+
+	.modal-content {
+		height: 65vh;
+	}
+}
+.modal-content {
+	border-top: 1px solid #ccc;
+	z-index: 2;
+	position: relative;
+}
 </style>
+	

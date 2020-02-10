@@ -1,43 +1,56 @@
 <template>
   <form v-on:submit.prevent="handleTripCreate">
 
-		<h3>Trip</h3>
-		<div>
-			<label><strong>You're leaving from..</strong></label>
-			<div class="relative">
-				<input type="text" placeholder="from Location" v-model="trip.fromLocation.meta" @input="getLocationFromApi('from', trip.fromLocation.meta)">
-				<!-- Click suggestion, fill value, if same remove -->
-				<ul class="location-suggestion-dropdown" v-if="showlocationSuggestionsDropdown === 'from'">
-					<li v-for="(suggestion) in this.locationSuggestions" :key="suggestion.id">
-						<button type="button" class="" :id="suggestion.id" @click="handleLocationSuggestionClick('from', suggestion)">{{suggestion.description}}</button>
-					</li>
-				</ul>
+		<div class="mb4">
+			<h1>Create Trip</h1>
+			<p>Add a trip in order to what items people are requesting from your destination. 
+				Once created, you can view see the requests inside this trip.
+			</p>
+		</div>
+
+		<div class="mb3">
+			<div>
+				<label><strong>You're leaving from..</strong></label>
+				<div class="relative">
+					<input type="text" placeholder="from Location" v-model="trip.fromLocation.meta" @input="getLocationFromApi('from', trip.fromLocation.meta)">
+					<!-- Click suggestion, fill value, if same remove -->
+					<ul class="location-suggestion-dropdown" v-if="showlocationSuggestionsDropdown === 'from'">
+						<li v-for="(suggestion) in this.locationSuggestions" :key="suggestion.id">
+							<button type="button" class="" :id="suggestion.id" @click="handleLocationSuggestionClick('from', suggestion)">{{suggestion.description}}</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div>
+				<input type="date" v-model="trip.fromDateMeta" @change="handleFromDateChange('from')">
 			</div>
 		</div>
 
-		<div>
-			<input type="date" v-model="trip.fromDateMeta" @change="handleFromDateChange('from')">
-		</div>
-
-		<div>
-			<label><strong>You're going to..</strong>:</label>
-			<!-- Click suggestion, fill value, if same remove -->
-			<div class="relative">
-				<input type="text" placeholder="to Location" v-model="trip.toLocation.meta" @input="getLocationFromApi('to', trip.toLocation.meta)">
+		<div class="mb3">
+			<div>
+				<label><strong>You're going to..</strong>:</label>
 				<!-- Click suggestion, fill value, if same remove -->
-				<ul class="location-suggestion-dropdown" v-if="showlocationSuggestionsDropdown === 'to'">
-					<li v-for="(suggestion) in this.locationSuggestions" :key="suggestion.id">
-						<button type="button" class="" :id="suggestion.id" @click="handleLocationSuggestionClick('to', suggestion)">{{suggestion.description}}</button>
-					</li>
-				</ul>
+				<div class="relative">
+					<input type="text" placeholder="to Location" v-model="trip.toLocation.meta" @input="getLocationFromApi('to', trip.toLocation.meta)">
+					<!-- Click suggestion, fill value, if same remove -->
+					<ul class="location-suggestion-dropdown" v-if="showlocationSuggestionsDropdown === 'to'">
+						<li v-for="(suggestion) in this.locationSuggestions" :key="suggestion.id">
+							<button type="button" class="" :id="suggestion.id" @click="handleLocationSuggestionClick('to', suggestion)">{{suggestion.description}}</button>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div>
+				<input type="date" v-model="trip.toDateMeta" @change="handleFromDateChange('to')">
 			</div>
 		</div>
 
-		<div>
-			<input type="date" v-model="trip.toDateMeta" @change="handleFromDateChange('to')">
-		</div>
+		<button type="submit" class="small-block box">
+				Create Trip
+		</button>
 
-		<button type="submit">Create Trip</button>
 	</form>
 </template>
 
@@ -134,9 +147,24 @@ export default {
 
 		async handleTripCreate() {
 			// Call async action
+			// Create trip.
 			this.$store.dispatch('createTrip', this.trip)
-				.then(() => {
-						this.$emit('tripCreated');
+				.then((trip) => {
+					let messageSuccess = {
+						title: 'Trip Created ✈',
+						message: 'Redirecting you there'
+					}
+					// Tell parent of event.
+					this.$emit('tripCreated');
+
+					// Set App Modal (good job!)
+					this.$store.dispatch('showAppMessage', messageSuccess).then(() => {
+
+						// Redirect to Trip created.
+						this.$router.push({ name: 'my-trip', params: { id: trip.id } })
+					})
+					// Route to created trip once created.
+						
 				})
 		},
 
