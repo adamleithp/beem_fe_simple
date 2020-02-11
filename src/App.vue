@@ -351,5 +351,13 @@ p {
 	z-index: 2;
 	position: relative;
 }
+
+
+.text--increase {
+	color: #73ff73;
+	font-size: 1.4em;
+	line-height: 0;
+	vertical-align: middle;
+}
 </style>
 	

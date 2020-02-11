@@ -28,6 +28,11 @@ const routes = [
     name: 'my-trip',
     component: () => import(/* webpackChunkName: "about" */ '../views/MyTrip.vue')
   },
+    {
+      path: '/my-trip/:tripId/request/:id',
+      name: 'my-trips-request',
+      component: () => import(/* webpackChunkName: "about" */ '../views/MyTripsRequest.vue')
+    },
   {
     path: '/requests',
     name: 'requests',

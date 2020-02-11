@@ -1,5 +1,5 @@
 <template>
-  <div class="my-trip" v-if="!loading">
+  <div class="my-trip pb5" v-if="!loading">
 		<div class="w-100 pt5 mb4">
 
 			<div class="mt5 ph2 mb4 flex flex-row align-center">
@@ -74,15 +74,24 @@
 
 				<ul class="list pa0" v-if="attachedRequests.length">
 					<li v-for="(request) in attachedRequests" :key="request.id" class="mb3">
+						<router-link 
+						:to="{ 
+							name: 'my-trips-request', 
+							params: { 
+								tripId: trip.id,
+								id: request.id
+							}
+						}">
+							<MyTripsRequest
+								:request="request"
+								context="attached"
+								:tripId="trip.id"
+								:status="'ACCEPTED'"
+								:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
+								:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
+								@requestChanged="getTrip()"/>
+						</router-link>
 
-						<TripRequest
-							:request="request"
-							context="attached"
-							:tripId="trip.id"
-							:status="'ACCEPTED'"
-							:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
-							:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
-							@requestChanged="getTrip()"/>
 					</li>
 				</ul>
 			</div>
@@ -141,14 +150,14 @@
 /* eslint-disable no-console */
 import Place from '@/components/Place.vue'
 import MyTrip from '@/components/MyTrip.vue'
-import TripRequest from '@/components/TripRequest.vue'
+import MyTripsRequest from '@/components/MyTripsRequest.vue'
 
 export default {
 	name: 'myTripView',
 	components: {
 		Place,
 		MyTrip,
-		TripRequest,
+		MyTripsRequest,
 	},
 
 	data() {
