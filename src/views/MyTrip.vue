@@ -1,6 +1,6 @@
 <template>
   <div class="my-trip pb5" v-if="!loading">
-		<div class="w-100 pt5 mb4">
+		<div class="w-100 pt2 mb4">
 
 			<div class="mt5 ph2 mb4 flex flex-row align-center">
 				<router-link to="/trips" class=" black f6 text--info">
@@ -20,7 +20,7 @@
 			</div>
 
 			<div class="ph2">
-				<div class="medium-block box">
+				<div class="medium-block box box--light">
 					Profit
 					<h1 class="ma0">{{totalProfitOfTrip}}</h1>
 				</div>
@@ -36,7 +36,7 @@
 		<div class="flex mb4">	
 			<div class="w-33">
 				<div class="ph2">
-					<div class="medium-block box box--light pointer" 
+					<div class="medium-block box pointer" 
 						:class="showTab === 'attached' ? 'box--light--active':''"
 						@click="showTab = 'attached'">
 						Accepted
@@ -46,7 +46,7 @@
 			</div>
 			<div class="w-33">
 				<div class="ph2">
-					<div class="medium-block box box--light pointer"
+					<div class="medium-block box pointer"
 						:class="showTab === 'countered' ? 'box--light--active':''"
 						@click="showTab = 'countered'">
 						Countered
@@ -56,7 +56,7 @@
 			</div>
 			<div class="w-33">
 				<div class="ph2">
-					<div class="medium-block box box--light pointer"
+					<div class="medium-block box pointer"
 						:class="showTab === 'offered' ? 'box--light--active':''"
 						@click="showTab = 'offered'">
 						Pending
@@ -75,21 +75,17 @@
 				<ul class="list pa0" v-if="attachedRequests.length">
 					<li v-for="(request) in attachedRequests" :key="request.id" class="mb3">
 						<router-link 
-						:to="{ 
-							name: 'my-trips-request', 
-							params: { 
-								tripId: trip.id,
-								id: request.id
+							:to="{ 
+								name: 'my-trips-request', 
+								params: { 
+									tripId: trip.id,
+									id: request.id,
+									context: 'attached'
+								}
 							}
-						}">
+						">
 							<MyTripsRequest
-								:request="request"
-								context="attached"
-								:tripId="trip.id"
-								:status="'ACCEPTED'"
-								:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
-								:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
-								@requestChanged="getTrip()"/>
+								:request="request"/>
 						</router-link>
 
 					</li>
@@ -110,14 +106,20 @@
 							<p>You've countered with: {{counteredRequest.price.currencyCode}} {{counteredRequest.price.amount}}</p>
 							<p>Status of counter offer: {{counteredRequest.counterStatus}}</p>
 						</div> -->
-						<TripRequest
-							:request="counteredRequest.request"
-							context="countered"
-							:tripId="trip.id"
-							:status="counteredRequest.counterStatus"
-							:isThisAttachedToTrip="isThisAttachedToTrip(counteredRequest.request.id)"
-							:isThisCounteredToTrip="isThisCounteredToTrip(counteredRequest.request.id)"
-							@requestChanged="getTrip()"/>
+
+						<router-link 
+							:to="{ 
+								name: 'my-trips-request', 
+								params: { 
+									tripId: trip.id,
+									id: counteredRequest.request.id,
+									context: 'countered'
+								}
+							}
+						">
+							<MyTripsRequest
+								:request="counteredRequest.request"/>
+						</router-link>
 					</li>
 				</ul>
 			</div>
@@ -130,13 +132,20 @@
 
 				<ul class="list pa0" v-if="requestForLocation">
 					<li v-for="(request) in requestForLocation" :key="request.id" class="mb3">
-						<TripRequest
-							:request="request"
-							context="offered"
-							:tripId="trip.id"
-							:isThisAttachedToTrip="isThisAttachedToTrip(request.id)"
-							:isThisCounteredToTrip="isThisCounteredToTrip(request.id)"
-							@requestChanged="getTrip()"/>
+						<router-link 
+							:to="{ 
+								name: 'my-trips-request', 
+								params: { 
+									tripId: trip.id,
+									id: request.id,
+									context: 'offered'
+								}
+							}
+						">
+							<MyTripsRequest
+								:request="request"/>
+						</router-link>
+
 					</li>
 				</ul>
 			</div>
@@ -202,7 +211,9 @@ export default {
 			this.$store.dispatch('getMyTrip', this.$route.params.id)
 				.then((trip) => {
 					this.trip = trip;
+					
 					this.counteredRequests = this.trip.counteredRequests;
+					console.log('this.trip', this.counteredRequests);
 					this.attachedRequests = this.trip.attachedRequests;
 					this.loading = false;
 

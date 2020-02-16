@@ -99,7 +99,21 @@ button {
 	text-align: center;
 	line-height: 1.15em;
 }
-input {
+input[type="checkbox"]{
+	height: 2rem;
+	width: 2rem;
+}
+input[type="number"] {
+	margin-bottom: 1em;
+	width: 100%;
+	padding: .5em;
+	box-sizing: border-box;
+	height: 3em;
+	font-size: 1.6rem;
+}
+
+input[type="date"],
+input[type="text"]{
 	margin-bottom: 1em;
 	width: 100%;
 	padding: .5em;
@@ -238,6 +252,17 @@ p {
 	height: 93px;
 	font-size: 1.1em;
 }
+.medium-block--stretch {
+	height: auto;
+	overflow: hidden;
+	border:1px solid #222;
+
+	img {
+		margin: -1em 0 1em -1em;
+		width: calc(100% + 2em);
+		max-width: 200%;
+	}
+}
 .small-block {
 	width: 100%;
 	// height: 183px;
@@ -249,23 +274,37 @@ p {
 	color: #fff;
 	padding: 1rem;
 
+	p {
+		font-size: 1rem;
+		margin: 0;
+	}
+
 	&:hover {
 		background: #444;
 	}
 }
+	.box--caution {
+		background:#fbfbca;
+		color:#333;
+		border: 1px solid#bdbd70;
+
+		&:hover {
+			background: #fbfbca;
+		}
+	}
 	.box--light {
 		background: #fff;
-		color: #979797;
-		border: 1px solid #979797;
+		color: #4f4f4f;
+		border: 2px solid #979797;
 
 		&:hover {
 			background: #f3f3f3;
 		}
 	}
 		.box--light--active {
-			background: #fff;
-			color: #333;
-			border: 1px solid #333;
+			background: #646464 !important;
+			// color: #333;
+			// border: 1px solid #333;
 		}
 
 

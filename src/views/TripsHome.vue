@@ -35,7 +35,7 @@
 		
 
     <div class="mb3 ph2">
-			<button class="small-block box box--light" @click="() => isTripFormVisible = !isTripFormVisible">
+			<button class="small-block box" @click="() => isTripFormVisible = !isTripFormVisible">
 				{{isTripFormVisible ? "Close form" : "Create"}}
 			</button>
 		</div>
