@@ -57,6 +57,9 @@ export default {
 .flex-1 {
 	flex: 1;
 }
+.flex-2 {
+	flex: 2;
+}
 
 #nav {
   padding: 30px 0;
@@ -109,7 +112,7 @@ input[type="number"] {
 	padding: .5em;
 	box-sizing: border-box;
 	height: 3em;
-	font-size: 1.6rem;
+	// font-size: 1.6rem;
 }
 
 input[type="date"],
@@ -119,6 +122,18 @@ input[type="text"]{
 	padding: .5em;
 	box-sizing: border-box;
 	height: 3em;
+}
+textarea {
+	margin-bottom: 1em;
+	width: 100%;
+	padding: .5em;
+	box-sizing: border-box;
+	min-height: 100px;
+	max-width: 100%;
+	min-width: 100%;
+}
+input,textarea {
+	border: 1px solid #ccc;
 }
 label {
 	display: block;
@@ -283,6 +298,7 @@ p {
 		background: #444;
 	}
 }
+	
 	.box--caution {
 		background:#fbfbca;
 		color:#333;
@@ -295,10 +311,11 @@ p {
 	.box--light {
 		background: #fff;
 		color: #4f4f4f;
-		border: 2px solid #979797;
+		border: 2px dotted #979797;
 
 		&:hover {
-			background: #f3f3f3;
+			background: #fff;
+			color: #4f4f4f;
 		}
 	}
 		.box--light--active {
@@ -382,7 +399,7 @@ p {
 	animation: .3s alternate modalBottomSlideUp ease-in-out;
 
 	.modal-content {
-		height: 65vh;
+		padding-bottom: 6rem;
 	}
 }
 .modal-content {

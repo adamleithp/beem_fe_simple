@@ -29,7 +29,7 @@
 			</div>
 
 			<!-- IF PENDING/OFFERED -->
-			<div class="mv3 flex justify-between" v-if="this.$route.params.context === 'offered'">
+			<div class="ph2 mv3 flex justify-between" v-if="this.$route.params.context === 'offered'">
 				<button class="box flex-1 mr2" 
 					@click="acceptRequestOffer()">
 					Accept Offer
@@ -139,9 +139,7 @@
 								<p class="mb1"><strong>You're leaving from..</strong></p>
 								<div class="relative flex items-center">
 									<div class="input-number-label mr1 mb3">
-										<span class="f3 fw7">
-											<Currency :currencyCode="request.offeredPrice.currencyCode"/>
-										</span>
+										<Currency :currencyCode="request.offeredPrice.currencyCode"/>
 									</div>
 									<input 
 										id="counter-offer"
@@ -190,7 +188,7 @@ export default {
 		return {
 			request: {},
 			loading: true,
-			isCounterFormVisible: true,
+			isCounterFormVisible: false,
 			counterOfferPrice: {
 				amount: 0,
 				currencyCode: 'USD'
@@ -236,7 +234,24 @@ export default {
 				requestId: this.$route.params.id
 			})
 				.then(() => {
-					console.log('success');
+					let messageSuccess = {
+						title: 'Reserved Offer ✓',
+						message: 'You have your mission.'
+					}
+
+					// Set App Modal (good job!)
+					this.$store.dispatch('showAppMessage', messageSuccess).then(() => {
+
+						// Redirect to Trip created.
+						this.$router.push({ 
+							name: 'my-trips-request', 
+							params: { 
+								tripId: this.$route.params.tripId,
+								id: this.$route.params.id,
+								context: 'countered'
+							}
+						})
+					})
 					
 					// this.$emit('requestChanged');
 				})
@@ -305,9 +320,8 @@ export default {
 <style lang="scss">
 .input-number-label {
 	position: absolute;
-	left: 1em;
-	height: 5rem;
-	top: -1px;
+	left: 0.6em;
+	top: 11px;
 	display: flex;
 	align-items: center;
 }

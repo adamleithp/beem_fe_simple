@@ -11,7 +11,7 @@
 		</div>
 		
 		<div class="mb4 ph2">
-			<button class="small-block box box--light">
+			<button class="small-block box">
 				Scan email to find trips.
 			</button>
 			<p class="text--info">You can have trips added automatically in <u>Settings</u>.</p>
@@ -28,7 +28,7 @@
 		<ul v-if="this.myTrips" class="list ph2 ma0 mb3">
 			<li v-for="(trip) in this.myTrips" :key="trip.id" class="mb3">
 				<router-link :to="{ name: 'my-trip', params: { id: trip.id }}" class="link">
-					<MyTrip :trip="trip"/>
+					<MyTrip :trip="trip" isLink="true"/>
 				</router-link>
 			</li>
 		</ul>

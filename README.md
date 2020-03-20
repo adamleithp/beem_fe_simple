@@ -30,6 +30,11 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 
+### File Naming Methodology
+Their & My are used to name components. This holds context on the component. Later when we are doing security, we will need to validate each visit by who can see it.
+
+
+
 
 ### TODO
 

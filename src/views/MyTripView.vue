@@ -3,7 +3,7 @@
 		<div class="w-100 pt2 mb4">
 
 			<div class="mt5 ph2 mb4 flex flex-row align-center">
-				<router-link to="/trips" class=" black f6 text--info">
+				<router-link to="/trips" class="black f6 text--info">
 					<h3 class="ma0 mt1">Back to Trips</h3>
 				</router-link>  
 			</div>
@@ -21,7 +21,7 @@
 
 			<div class="ph2">
 				<div class="medium-block box box--light">
-					Profit
+					Your Profit
 					<h1 class="ma0">{{totalProfitOfTrip}}</h1>
 				</div>
 			</div>

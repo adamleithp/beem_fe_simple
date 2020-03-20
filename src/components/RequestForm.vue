@@ -1,8 +1,15 @@
 <template>
   <form v-on:submit.prevent="handleRequestCreate">
+
+		<div class="mb4">
+			<h1>Create Request</h1>
+			<p>Add a trip in order to what items people are requesting from your destination. 
+				Once created, you can view see the requests inside this trip.
+			</p>
+		</div>
+
 		<!-- create package -->
 		<div class="mb3">
-			<h3>Package</h3>
 			<div class="mb3">
 				<div>
 					<label><strong>Package Name</strong></label>
@@ -10,9 +17,14 @@
 				</div>
 				<div>
 					<label><strong>Package Description</strong></label>
-					<input type="text" placeholder="package description" v-model="request.package.description">
+					<textarea 
+						v-model="request.package.description"
+					></textarea>
 				</div>
 			</div>
+
+			
+
 			<div>
 				<label><strong>Location requested from</strong></label>
 				<div class="relative">
@@ -52,7 +64,7 @@
 			</div>
 		</div>
 
-		<div class="section--total mb3">
+		<div class="section--total mb4">
 			<div class="flex justify-between">
 				<p>Price of product:</p><p>{{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
 			</div>
@@ -65,7 +77,10 @@
 			</div>
 		</div>
 
-		<button type="submit">Create Request</button>
+		<button type="submit" class="small-block box mb4">
+			Create Request
+		</button>
+
 	</form>
 </template>
 

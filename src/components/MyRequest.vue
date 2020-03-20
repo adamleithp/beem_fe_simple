@@ -1,4 +1,22 @@
 <template>
+	<div class="flex">
+		
+		<div 
+			class="medium-block box flex items-center"
+			:class="isLink ? 'box--link' : 'box--light'"
+		>
+			<div>
+				<div class="flex">
+					<h5 class="ma0 mb2">{{request.package.name}}</h5> 
+				</div>
+				<h6 class="ma0 mt0">{{request.package.description}}</h6>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- MOVE THIS TO My REQUEST PAGE
+	
   <div class="my-request">
 		<div class="mb4">
 			<h3>{{request.package.name}} <Status :statusString="request.status"/>
@@ -30,20 +48,21 @@
 				</li>
 			</ul>
 		</div>
-	</div>
+	</div> -->
 </template>
 
 <script>
+/* eslint-disable no-unused-components */
 /* eslint-disable no-console */
-import Status from '@/components/Status.vue'
-import Place from '@/components/Place.vue'
-import RequestCounterOffer from '@/components/RequestCounterOffer.vue'
+// import Status from '@/components/Status.vue'
+// import Place from '@/components/Place.vue'
+// import RequestCounterOffer from '@/components/RequestCounterOffer.vue'
 
 export default {
 	name: 'MyRequest',
 	props: [
 		'request',
-		'context'
+		'isLink'
 	],
 	data() {
 		return {
@@ -52,9 +71,9 @@ export default {
 		}
 	},
 	components: {
-		RequestCounterOffer,
-		Status,
-		Place,
+		// RequestCounterOffer,
+		// Status,
+		// Place,
 	},
 	computed: {
 		thisRequestTrip() {
