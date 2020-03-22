@@ -65,6 +65,7 @@ function parseDateFromYMD(str) {
 			d = str.substr(6,2);
 
 	let date = new Date(y,m,d)
+	console.log('parseDateFromYMD date :', date / 1000);
 	return date / 1000;
 }
 
@@ -103,8 +104,8 @@ export default {
 					lat: 13.1059816,
 					lng: -59.61317409999999
 				},
-				fromDate: parseDateFromYMD(formatDatetoYMD(new Date)), // lol
-				toDate: parseDateFromYMD(formatDatetoYMD(new Date)),// lol
+				fromDate: new Date / 1000, 
+				toDate: new Date / 1000,
 
 				toDateMeta: formatDatetoYMD(new Date),
 				fromDateMeta: formatDatetoYMD(new Date),
@@ -143,9 +144,41 @@ export default {
 
 			// Assign to state
 			this.trip[whichLocationObject] = date;
+
+			console.log('this.trip :', new Date(this.trip.toDate  * 1000));
+			console.log('this.trip :', new Date(this.trip.fromDate * 1000));
 		},
 
 		async handleTripCreate() {
+
+
+			// const removeOneMonthFromDateFromUnix = (unixTimeStamp) => {
+			// 	var d = new Date(unixTimeStamp * 1000);
+			// 	console.log('d :', d);
+      //   // d.setMonth(d.getMonth() - 1, d.getDate());
+			// 	// console.log('d :', d);
+	
+      //   return Math.round(d.getTime() / 1000); 
+			// }
+
+			// let trip = this.trip;
+
+			// // console.log('trip.fromDate :', trip.fromDate);
+			// // console.log('trip.fromDate :', trip.toDate);
+			// // console.log('trip.fromDate :', formatDatetoYMD(trip.fromDate));
+			// // console.log('trip.fromDate :', formatDatetoYMD(trip.toDate));
+
+			// let res = {
+			// 	...trip, 
+			// 	fromDate: removeOneMonthFromDateFromUnix(trip.fromDate),
+			// 	toDate: removeOneMonthFromDateFromUnix(trip.toDate)
+			// };
+			
+			console.log('res.fromDate', new Date(this.trip.fromDate * 1000))
+			console.log('res.fromDate', new Date(this.trip.toDate * 1000))
+			console.log('res.fromDate', formatDatetoYMD(new Date(this.trip.fromDate * 1000)))
+			console.log('res.fromDate', formatDatetoYMD(new Date(this.trip.toDate * 1000)))
+
 			// Call async action
 			// Create trip.
 			this.$store.dispatch('createTrip', this.trip)

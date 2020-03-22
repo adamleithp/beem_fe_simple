@@ -188,6 +188,12 @@ export default {
 					console.log('request ->>> show delete options, ONLY IF status=pending');
 
 					this.request = request;
+
+					// TODO do this everywhere.
+					if (!this.request) {
+						throw "Request not Found"
+					}
+
 					this.loading = false;
 
 					// If Trip
@@ -203,7 +209,8 @@ export default {
 						this.status = 'attached';
 					}
 				})
-				.catch(() => {
+				.catch((error) => {
+					console.log(error);
 					this.$router.push({ name: 'home'})
 				})
 		},

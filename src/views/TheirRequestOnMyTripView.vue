@@ -122,32 +122,49 @@
 				</div>
 			</div>
 
-			<div class="ph2 mb4">
-				<h2>Your Checklist</h2>
-				<p>
-					This is the history and next actions required by you. 
-				</p>
+			<div v-if="context === 'accepted'">
+				<div class="ph2 mb4">
+					<h2>Your Checklist</h2>
+					<p>
+						This is the history and next actions required by you. 
+					</p>
+				</div>
+			
+				<div class="ph2 mb1">
+					<div class="medium-block medium-block--stretch box box--caution">
+						<p class="ma0 f4">Time left until your trip</p>
+						<h2 class="ma0 mt2 mb2 lh-title">
+							{{timeLeftUntilMyTrip}}
+						</h2>
+	<!-- 
+						<button class="box w-100" 
+							@click="acceptCounterOffer()">
+							Cancel Counter Offer
+						</button> -->
+					</div>
+				</div>
+
+
+				<div class="ph2">
+					<ul class="list pa0">
+						<li v-for="(item, idx) in checklist" :key="idx">
+							<label 
+								:for="idx" 
+								class="flex items-center box pointer" 
+								:class="item.value ? 'box--light--active': ''"
+							>
+								<input type="checkbox" name="item1" :id="idx" class="mr2" 
+									:value="item.value"
+									@change="() => item.value = !item.value">
+								<h3 class="ma0">{{item.title}}</h3>
+							</label>
+						</li>
+					</ul>
+				</div>
 			</div>
 
-			<div class="ph2">
-				<ul class="list pa0">
-					<li v-for="(item, idx) in checklist" :key="idx">
-						<label 
-							:for="idx" 
-							class="flex items-center box pointer" 
-							:class="item.value ? 'box--light--active': ''"
-						>
-							<input type="checkbox" name="item1" :id="idx" class="mr2" 
-								:value="item.value"
-								@change="() => item.value = !item.value">
-							<h3 class="ma0">{{item.title}}</h3>
-						</label>
-					</li>
-				</ul>
-			</div>
 
-
-
+			<!-- MODAL -->
 			<div class="modal modal--bottom" v-if="isCounterFormVisible">
 				<div class="modal-overlay" @click="() => isCounterFormVisible = !isCounterFormVisible"></div>
 				<div class="modal-content my2 pa3 bg-near-white h100">
@@ -222,6 +239,7 @@ export default {
 			loading: true,
 			context: '', //accepted, countered, pending
 			isCounterFormVisible: false,
+			timeLeftUntilMyTripLeaves: null,
 			// this is for the form offer...
 			counterOfferPrice: {
 				amount: 0,
@@ -244,6 +262,38 @@ export default {
 					value: false
 				},
 			]
+		}
+	},
+
+	computed: {
+		timeLeftUntilMyTrip() {
+			var date_now = new Date()
+			date_now = date_now.getTime();
+			const tripLeavesDate = new Date(this.timeLeftUntilMyTripLeaves * 1000);
+			
+			// Minus 1 from month
+			tripLeavesDate.setMonth(tripLeavesDate.getMonth() -1)
+			const tripLeavesUnixTimestamp = tripLeavesDate.getTime();
+
+			// console.log('date_now :', date_now);
+			// get total seconds between the times
+			var delta = Math.abs(tripLeavesUnixTimestamp - date_now) / 1000;
+
+			// calculate (and subtract) whole days
+			var days = Math.floor(delta / 86400);
+			delta -= days * 86400;
+
+			// // calculate (and subtract) whole hours
+			var hours = Math.floor(delta / 3600) % 24;
+			delta -= hours * 3600;
+
+			// // calculate (and subtract) whole minutes
+			// var minutes = Math.floor(delta / 60) % 60;
+			// delta -= minutes * 60;
+
+			// what's left is seconds
+			// var seconds = delta % 60;  // in theory the modulus is not required
+			return `${days} days, ${hours} hours`
 		}
 	},
 
@@ -270,6 +320,7 @@ export default {
 			this.$store.dispatch('getMyTrip', this.$route.params.tripId)
 				.then((trip) => {
 					this.trip = trip;
+					this.timeLeftUntilMyTripLeaves = trip.fromDate;
 					const yourCounterOffer = this.trip.counteredRequests.filter((counterRequest) => {
 						if (
 							counterRequest.request.id == this.$route.params.id &&
