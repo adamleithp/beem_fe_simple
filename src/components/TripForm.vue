@@ -184,7 +184,7 @@ export default {
 			this.$store.dispatch('createTrip', this.trip)
 				.then((trip) => {
 					let messageSuccess = {
-						title: 'Trip Created ✈',
+						title: 'Trip Created ✓', //✈
 						message: 'Redirecting you there'
 					}
 					// Tell parent of event.

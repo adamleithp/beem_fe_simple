@@ -104,7 +104,7 @@
 				<div class="ph2 list pa0">
 					<div class="medium-block medium-block--stretch box box--caution" >
 						<p class="ma0 f4">You've countered the original offer</p>
-						<h2 class="ma0 mt2 mb2 lh-title">
+						<h2 class="ma0 mt2 mb3 lh-title">
 							<Currency :currencyCode="myCounterOfferOnRequest.currencyCode"/>
 							{{myCounterOfferOnRequest.amount}}
 						</h2>
@@ -279,7 +279,7 @@ export default {
 			const tripLeavesDate = new Date(this.timeLeftUntilMyTripLeaves * 1000);
 			
 			// Minus 1 from month
-			tripLeavesDate.setMonth(tripLeavesDate.getMonth() -1)
+			tripLeavesDate.setMonth(tripLeavesDate.getMonth() - 1)
 			const tripLeavesUnixTimestamp = tripLeavesDate.getTime();
 
 			// console.log('date_now :', date_now);
@@ -354,7 +354,7 @@ export default {
 			})
 				.then(() => {
 					let messageSuccess = {
-						title: 'Reserved Offer ✓',
+						title: 'Accepted Request ✓',
 						message: 'You have your mission.'
 					}
 

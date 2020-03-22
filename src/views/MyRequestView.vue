@@ -55,14 +55,14 @@
 					v-if="status === 'pending'" 
 					class="medium-block medium-block--stretch box box--light mr2 flex-2">
 					<p class="ma0 f4">Status</p>
-					<h2 class="ma0 mt2 lh-title">{{request.status}}</h2>
+					<h2 class="ma0 mt2 lh-title">Pending</h2>
 				</div>
 
 				<div
 					v-if="status === 'countered'" 
 					class="medium-block medium-block--stretch box box--caution mr2 flex-2">
 					<p class="ma0 f4">Status</p>
-					<h2 class="ma0 mt2 mb2 lh-title">{{request.status}}</h2>
+					<h2 class="ma0 mt2 mb3 lh-title">Countered</h2>
 
 					<!-- Button inside box -->
 					<button type="submit" class="small-block box">
@@ -74,7 +74,7 @@
 					v-if="status === 'attached'" 
 					class="medium-block medium-block--stretch box box--accepted mr2 flex-2">
 					<p class="ma0 f4">Status</p>
-					<h2 class="ma0 mt2 lh-title">{{request.status}}</h2>
+					<h2 class="ma0 mt2 lh-title">Accepted by Traveller</h2>
 				</div>
 				<!-- CONDITION CONTENT =================================== -->
 
@@ -246,6 +246,14 @@ export default {
 					this.onThisTrip = request.trip;
 					this.tripArrivingDate = this.formatDatetoYMD(request.trip.toDate)
 					this.status = 'attached';
+
+					let messageSuccess = {
+						title: 'Accepted Counter Offer ✓',
+						message: 'The traveller can now get your item.'
+					}
+
+					// Set App Modal (good job!)
+					this.$store.dispatch('showAppMessage', messageSuccess)
 				})
 		},
 
@@ -261,6 +269,14 @@ export default {
 					this.status = 'pending';
 
 					console.log('TODO: This should add a counterRequest to trip.');
+
+					let messageSuccess = {
+						title: 'Declined Counter Offer ✗',
+						message: 'The traveller can now accept the original offer, or counter offer again.'
+					}
+
+					// Set App Modal (good job!)
+					this.$store.dispatch('showAppMessage', messageSuccess)
 				})
 		},
 
