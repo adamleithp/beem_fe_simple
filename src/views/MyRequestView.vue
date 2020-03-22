@@ -25,7 +25,6 @@
 						<p class="ma0 mt0">{{request.package.description}}</p>
 					</div>
 				</div>
-
 			</div>
 
 			<div class="ph2 mb3 flex">
@@ -39,17 +38,36 @@
 				</div>
 			</div>
 
-			<div class="ph3">
-				<p class="text--info flex hide">
-					<span class="mr2">
-						<IconInformation style="width:17px;"/>
-					</span>
-					HINT: Try increasing your offer.
-				</p>
+			<!-- CONDITION CONTENT =================================== -->
+
+			<div v-if="status === 'countered'">
+				<div class="ph2">
+					<button type="submit" class="small-block box mb4">
+						View counter offers
+					</button>
+				</div>
 			</div>
+
+			<div v-if="status === 'pending'">
+				<div class="ph3">
+					<p class="text--info flex hide">
+						<span class="mr2">
+							<IconInformation style="width:17px;"/>
+						</span>
+						HINT: Try increasing your offer.
+					</p>
+				</div>
+			</div>
+
+
 			
-			<div class="ph2 mb3">
+
+			<!-- IF ATTACHED ===================================-->
+			<div class="ph2 mb3 flex" v-if="status === 'attached'">
+				SHOW ATTACHED FOR HERE
 			</div>
+			<!-- CONDITION CONTENT =================================== -->
+
 
 			<div class="ph2 mb3 flex">
 				<div class="medium-block medium-block--stretch box box--light mr2">
@@ -78,9 +96,49 @@
 		
 			<div class="ph2 mb4">
 				<div class="medium-block medium-block--stretch box box--light">
-					<p class="ma0 f4">The location you will be to pick up item</p>
+					<p class="ma0 f4">Where the item comes from</p>
 					<h2 class="ma0 mt2 lh-title"><Place :placeId="request.toLocation.googlePlaceId"/></h2>
 				</div>
+			</div>
+
+			<!-- IF COUNTERED =================================== -->
+			<div class="mb4" v-if="status === 'countered'">
+				<div class="ph2 mb3">
+					<h2>Counter Requests</h2>
+					<p>
+						Travelers have seen your request, and have suggested a new price by countering with a new price.
+					</p>
+				</div>
+				
+				<ul class="ph2 list pa0">
+					<li v-for="(counterOffer) in request.counterOffers" :key="counterOffer.id" class="mb3">
+						<div class="medium-block medium-block--stretch box box--caution" >
+							<p class="ma0 f4">A traveller countered your offer</p>
+							<h2 class="ma0 mt2 mb2 lh-title"><Currency :currencyCode="counterOffer.price.currencyCode"/>{{counterOffer.price.amount}}</h2>
+
+							<div class="flex justify-between">
+								<button class="box flex-1 mr2" 
+									@click="acceptCounterOffer(counterOffer)">
+									Accept Counter
+								</button>
+								<button class="box flex-1 ml2" 
+									@click="declineCounterOffer(counterOffer)">
+									Decline Counter
+								</button>
+							</div>
+						</div>
+					</li>
+				</ul>
+	
+			</div>
+
+
+
+			<div class="ph2 mb3">
+				<h2>Manage my Request</h2>
+				<p>
+					Delete, edit or set preferences. Note: once your request is accepted, you need to request deletion of your request.
+				</p>
 			</div>
 
 			<button type="submit" class="small-block box mb4">
@@ -118,6 +176,8 @@ export default {
 		return {
 			request: {},
 			loading: true,
+			status: 'pending',
+			onThisTrip: null,
 		}
 	},
 
@@ -130,12 +190,47 @@ export default {
 					this.request = request;
 					this.loading = false;
 
-					console.log('request :', request);
+					// If Trip
+					if (request.trip) this.onThisTrip = request.trip;
+
+					if (request.status === 'PENDING') {
+						this.status = 'pending';
+					}
+					if (request.status === 'COUNTERED') {
+						this.status = 'countered';
+					}
+					if (request.status === 'ACCEPTED') {
+						this.status = 'attached';
+					}
 				})
 				.catch(() => {
 					this.$router.push({ name: 'home'})
 				})
 		},
+
+		async acceptCounterOffer(counterOffer) {
+			this.$store.dispatch('acceptCounterOfferAsRequester', {
+				tripId: counterOffer.trip.id,
+				requestId: this.request.id,
+				counterRequestId: counterOffer.id
+			})
+				.then((request) => {
+					this.onThisTrip = request.trip;
+					this.status = 'attached';
+				})
+		},
+
+		async declineCounterOffer(counterOffer) {
+			this.$store.dispatch('declineCounterOfferAsRequester', {
+				tripId: counterOffer.trip.id,
+				requestId: this.request.id,
+				counterRequestId: counterOffer.id
+			})
+				.then(() => {
+					this.onThisTrip = {};
+					this.status = 'pending';
+				})
+		}
 	},
 
 	mounted() {
@@ -143,7 +238,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-
-</style>

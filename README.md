@@ -92,3 +92,6 @@ Their & My are used to name components. This holds context on the component. Lat
 - [ ] Traveller: Accept terms to create trip
 - [ ] Requester: Accept terms to create request
 
+## Idea
+
+- Request by location view. Check items off a list you can grab and bulk add to your trip.

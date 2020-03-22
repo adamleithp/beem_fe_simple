@@ -8,7 +8,7 @@
       <router-link to="/trips">Trips</router-link>  
       <router-link to="/requests">Requests</router-link>
     </div>
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
 
 
 		<div class="modal modal--center" v-if="this.appMessage.title !== ''">
@@ -61,6 +61,10 @@ export default {
 	flex: 2;
 }
 
+.text--bold {
+	font-weight: bold;
+}
+
 #nav {
   padding: 30px 0;
 
@@ -78,17 +82,6 @@ export default {
   }
 }
 
-button {
-	// height: 2.2em;
-	// padding: 0 1.3em;
-	// box-shadow: 0px 4px 4px 0px #ccc;
-	// background: #42b983;
-	// color: #fff;
-	// font-weight: bold;
-	// font-size: 1.1em;
-	// cursor: pointer;
-	// position: relative;
-}
 .badge {
 	position: absolute;
 	top: 0.3em;

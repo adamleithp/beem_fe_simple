@@ -2,8 +2,6 @@
 	<div class="my-trip pb5" v-if="!loading">
 		<div class="w-100 pt2 mb4">
 
-			{{this.$route.params.context}}
-
 			<div class="mt5 ph2 mb4 flex flex-row align-center">
 				<router-link :to="{ 
 						name: 'my-trip', 
@@ -17,19 +15,23 @@
 
 			<div class="ph2 mb4">
 				<h1>John A's Request...</h1>
-				<p v-if="this.$route.params.context === 'offered'">
+
+				<p v-if="context === 'pending'">
 					This is a package you've you can take. Accept, counter or just leave it as is.
 				</p>
-				<p v-if="this.$route.params.context === 'countered'">
-					You've countered the original price.
+				<p v-if="context === 'countered'">
+					This is a package you've countered! You can cancel your counter offer, or wait until the Requester accepts.
 				</p>
-				<p v-if="this.$route.params.context === 'attached'">
+				<p v-if="context === 'accepted'">
 					This is a package you've <strong>Accepted</strong> to take. Before you can get paid, let's follow belows checklist.
 				</p>
 			</div>
 
+
+
+
 			<!-- IF PENDING/OFFERED -->
-			<div class="ph2 mv3 flex justify-between" v-if="this.$route.params.context === 'offered'">
+			<div class="ph2 mv3 flex justify-between" v-if="context === 'pending'">
 				<button class="box flex-1 mr2" 
 					@click="acceptRequestOffer()">
 					Accept Offer
@@ -40,33 +42,29 @@
 				</button>
 			</div>
 
-			<!-- IF COUNTERED -->
-			<div class="ph2 mb4">
-				<div class="box box--caution" v-if="this.$route.params.context === 'countered'">
-					Your counter request of 
-					<strong><Currency :currencyCode="request.counterOffers[0].price.currencyCode"/>{{request.counterOffers[0].price.amount}}</strong>
-					is Pending.
-				</div>
-			</div>
+
 
 
 			<div class="ph2 mb3">
 				<div class="medium-block medium-block--stretch box box--light">
-					<p>Name</p>
-					<h2 class="ma0 mt1 mb2">{{request.package.name}}</h2>
-					<h4 class="ma0 mt1">{{request.package.description}}</h4>
+					<div>
+						<div class="flex">
+							<h2 class="ma0 mb2">{{request.package.name}}</h2> 
+						</div>
+						<p class="ma0 mt0">{{request.package.description}}</p>
+					</div>
 				</div>
-
 			</div>
+
+
 
 			<div class="flex ph2 mb3">
 				<div class="medium-block medium-block--stretch box box--light mr3">
-					<p class="ma0 f4">Profit</p>
+					<p class="ma0 f4">Your Profit</p>
 					<h1 class="ma0 mt2 lh-title">
 						<Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.offeredPrice.amount}}
 					</h1>
 				</div>
-
 				<div class="medium-block medium-block--stretch box box--light">
 					<p class="ma0 f4">Cost of item</p>
 					<h1 class="ma0 mt2 lh-title">
@@ -74,6 +72,40 @@
 					</h1>
 				</div>
 			</div>
+
+
+
+
+
+			<div v-if="context === 'accepted'">
+				<div class="ph2">
+					<button type="submit" class="small-block box mb4">
+						Update your checklist
+					</button>
+				</div>
+			</div>
+			
+
+
+
+
+			<div v-if="context === 'countered'" class="mb3">
+				<div class="ph2 list pa0">
+					<div class="medium-block medium-block--stretch box box--caution" >
+						<p class="ma0 f4">You've countered the original offer</p>
+						<h2 class="ma0 mt2 mb2 lh-title">
+							<Currency :currencyCode="myCounterOfferOnRequest.currencyCode"/>
+							{{myCounterOfferOnRequest.amount}}
+						</h2>
+
+						<button class="box w-100" 
+							@click="acceptCounterOffer()">
+							Cancel Counter Offer
+						</button>
+					</div>
+				</div>
+			</div>
+			
 
 			<div class="ph2 mb3">
 				<div class="medium-block medium-block--stretch box">
@@ -124,7 +156,7 @@
 						<form @submit.prevent="handleCounterOfferFormSubmit">
 
 							<div class="mb4">
-								<h1>Counter Requests Offer</h1>
+								<h1>Make counter offer</h1>
 								<p>You think John A's original offer is too little? Counter with a price that you think
 									that's fair. You only get to do this once.
 								</p>
@@ -135,12 +167,12 @@
 								<h1 class="ma0 mt2 lh-title"><Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.offeredPrice.amount}}</h1>
 							</div>
 
-							<label for="counter-offer" class="mb4">
-								<p class="mb1"><strong>You're leaving from..</strong></p>
+							<label for="counter-offer" class="input-number-label mb4">
+								<p class="mb1"><strong>Your counter offer</strong></p>
 								<div class="relative flex items-center">
-									<div class="input-number-label mr1 mb3">
+									<span class="symbol">
 										<Currency :currencyCode="request.offeredPrice.currencyCode"/>
-									</div>
+									</span>
 									<input 
 										id="counter-offer"
 										class="input-number-input ma0" 
@@ -179,7 +211,7 @@ import Place from '@/components/Place.vue'
 // import TheirRequest from '@/components/TheirRequest.vue'
 
 export default {
-	name: 'MyTripRequest',
+	name: 'TheirRequestOnMyTripView',
 	components: {
 		Currency,
 		Place,
@@ -188,11 +220,20 @@ export default {
 		return {
 			request: {},
 			loading: true,
+			context: '', //accepted, countered, pending
 			isCounterFormVisible: false,
+			// this is for the form offer...
 			counterOfferPrice: {
 				amount: 0,
 				currencyCode: 'USD'
 			},
+
+			// this is your actual counter offer from API...
+			myCounterOfferOnRequest: {
+				amount: 0,
+				currencyCode: 'USD'
+			},
+
 			checklist: [
 				{
 					title: "Picked Up",
@@ -205,26 +246,46 @@ export default {
 			]
 		}
 	},
-	// computed: {
 
-	// },
 	methods: {
-		async getTheirRequest() {
-			console.log(this.$route.params);
-			
+		async getTheirRequest() {			
 			this.$store.dispatch('getMyRequest', this.$route.params.id)
 				.then((request) => {					
-					console.log('request', request);
-
 					this.request = request;	
+					// This is to have Counter Offer form have the original offer to build from..
 					this.counterOfferPrice = {
-						amount: request.offeredPrice.amount,
+						amount: request.offeredPrice.amount + 5,
 						currencyCode: request.offeredPrice.currencyCode,
 					}		
+					this.context = request.status.toLowerCase();
+					this.getMyTrip(); //TODO make this it's own request so you can get all info....
 					this.loading = false;
 				})
 				.catch(() => {
 					this.$router.push({ name: 'home'})
+				})
+		},
+
+		async getMyTrip() {
+			this.$store.dispatch('getMyTrip', this.$route.params.tripId)
+				.then((trip) => {
+					this.trip = trip;
+					const yourCounterOffer = this.trip.counteredRequests.filter((counterRequest) => {
+						if (
+							counterRequest.request.id == this.$route.params.id &&
+							counterRequest.trip.id == this.$route.params.tripId
+						) {
+							return counterRequest
+						}
+					})[0]
+
+					this.myCounterOfferOnRequest = {
+						amount: yourCounterOffer.price.amount,
+						currencyCode: yourCounterOffer.price.currencyCode,
+					}
+				})
+				.catch(() => {
+					// this.$router.push({ name: 'home'})
 				})
 		},
 
@@ -241,19 +302,16 @@ export default {
 
 					// Set App Modal (good job!)
 					this.$store.dispatch('showAppMessage', messageSuccess).then(() => {
-
 						// Redirect to Trip created.
 						this.$router.push({ 
-							name: 'my-trips-request', 
+							name: 'their-request-accepted', 
+							meta: { context: 'accepted' },
 							params: { 
 								tripId: this.$route.params.tripId,
 								id: this.$route.params.id,
-								context: 'countered'
 							}
 						})
 					})
-					
-					// this.$emit('requestChanged');
 				})
 		},
 
@@ -268,7 +326,10 @@ export default {
 					currencyCode: this.counterOfferPrice.currencyCode,
 				}
 			})
-				.then(() => {
+				.then((yourTrip) => {
+					console.log('attachCounterOfferToRequest....yourTrip :', yourTrip);
+
+					
 					let messageSuccess = {
 						title: 'Counter Offered ✓',
 						message: 'John A will now review your offer.'
@@ -276,26 +337,31 @@ export default {
 
 					// Set App Modal (good job!)
 					this.$store.dispatch('showAppMessage', messageSuccess).then(() => {
-
 						// Redirect to Trip created.
-						this.$router.push({ 
-							name: 'my-trips-request', 
+						this.$router.replace({ 
+							name: 'their-request-countered', 
+							meta: { context: 'countered' },
 							params: { 
 								tripId: this.$route.params.tripId,
 								id: this.$route.params.id,
-								context: 'countered'
 							}
 						})
+
+					// console.log('yourCounterOffer :', yourCounterOffer);
+					// this.myCounterOfferOnRequest = {
+					// 	amount: yourCounterOffer.price.amount,
+					// 	currencyCode: yourCounterOffer.price.currencyCode,
+					// }
+					// console.log('UPDATE WITH THIS. :', this.myCounterOfferOnRequest);
 					})
-					// this.$emit('requestChanged');
 				})
 		},
 
 		async handleCounterOfferFormSubmit() {
-			// if (this.counterOfferNumber <= this.request.offeredPrice.amount) {
-			// 	console.log('cant be equal or lower than original offer');
-			// 	return false;
-			// }
+			if (this.counterOfferNumber <= this.request.offeredPrice.amount) {
+				console.log('cant be equal or lower than original offer');
+				return false;
+			}
 			this.hideCounterRequestForm();
 			this.attachCounterOfferToRequest();
 		},
@@ -319,16 +385,19 @@ export default {
 
 <style lang="scss">
 .input-number-label {
-	position: absolute;
-	left: 0.6em;
-	top: 11px;
-	display: flex;
-	align-items: center;
+	.symbol {
+		position: absolute;
+		left: 0.7em;
+		top: 15px;
+		display: flex;
+		align-items: center;
+	}
+	input {
+		padding-left: 1.8em;
+		margin-bottom: 0rem;
+	}
 }
-.input-number-input[type="number"] {
-	padding-left: 1.1em;
-	margin-bottom: 0rem;
-}
+
 </style>
 
 

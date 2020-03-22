@@ -29,9 +29,22 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/MyTripView.vue')
   },
     {
-      path: '/my-trip/:tripId/request/:id',
-      name: 'my-trips-request',
-      component: () => import(/* webpackChunkName: "about" */ '../views/MyTripsRequestView.vue')
+      path: '/my-trip/:tripId/their-pending-request/:id',
+      name: 'their-request-pending',
+      meta: { context: 'pending' },
+      component: () => import(/* webpackChunkName: "about" */ '../views/TheirRequestOnMyTripView.vue')
+    },
+    {
+      path: '/my-trip/:tripId/their-countered-request/:id',
+      name: 'their-request-countered',
+      meta: { context: 'countered' },
+      component: () => import(/* webpackChunkName: "about" */ '../views/TheirRequestOnMyTripView.vue')
+    },
+    {
+      path: '/my-trip/:tripId/their-accepted-request/:id',
+      name: 'their-request-accepted',
+      meta: { context: 'accepted' },
+      component: () => import(/* webpackChunkName: "about" */ '../views/TheirRequestOnMyTripView.vue')
     },
   {
     path: '/requests',

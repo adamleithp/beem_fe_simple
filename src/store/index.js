@@ -39,7 +39,7 @@ export default new Vuex.Store({
 			}, 2500);
 		},
 
-
+		// returns Request
 		async acceptCounterOfferAsRequester(_, payload) {
 			const {tripId, requestId, counterRequestId} = payload;
 
@@ -116,6 +116,8 @@ export default new Vuex.Store({
 			}
 		},
 
+
+		// Returns Request
 		async declineCounterOfferAsRequester(_, payload) {
 			const {tripId, requestId, counterRequestId} = payload;
 
@@ -192,6 +194,7 @@ export default new Vuex.Store({
 			}
 		},
 
+		// Returns a trip.
 		async attachCounterOfferToRequest(_, payload){
 			const {tripId, requestId, counterOffer} = payload;
 
@@ -217,6 +220,12 @@ export default new Vuex.Store({
 						counteredRequests {
 							id
 							counterStatus
+							trip {
+								id
+							}
+							request {
+								id
+							}
 							price {
 								currencyCode
 								amount
@@ -485,6 +494,9 @@ export default new Vuex.Store({
 							counteredRequests {
 								id
 								counterStatus
+								trip {
+									id
+								}
 								request {
 									id
 									status

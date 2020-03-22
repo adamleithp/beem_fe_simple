@@ -8,7 +8,9 @@
 export default {
 	name: 'Place',
 
-	props: ['placeId'],
+	props: [
+		'placeId',
+	],
 
 	data() {
 		return {

@@ -29,8 +29,8 @@
 
 
 		<div class="ph2">
-			<h2>Offers</h2>
-			<p>This is the offers that are pending, countered, or accepted.</p>
+			<h2>Relevant Requests</h2>
+			<p>These are the requests pending, countered, or accepted needed from <Place :placeId="trip.fromLocation.googlePlaceId" class="text--bold"/> to <Place :placeId="trip.toLocation.googlePlaceId" class="text--bold"/></p>
 		</div>
 
 		<div class="flex mb4">	
@@ -67,7 +67,7 @@
 		</div>
 
 
-		<div class="ph2">
+		<div class="ph2 mb4">
 			<div class="" v-if="showTab === 'attached'">
 				<p v-if="!attachedRequests.length" class="text--info">No accepted packages yet</p>
 				<h3 v-if="attachedRequests.length">Accepted</h3>
@@ -76,11 +76,10 @@
 					<li v-for="(request) in attachedRequests" :key="request.id" class="mb3">
 						<router-link 
 							:to="{ 
-								name: 'my-trips-request', 
+								name: 'their-request-accepted', 
 								params: { 
 									tripId: trip.id,
 									id: request.id,
-									context: 'attached'
 								}
 							}
 						">
@@ -109,11 +108,10 @@
 
 						<router-link 
 							:to="{ 
-								name: 'my-trips-request', 
+								name: 'their-request-countered', 
 								params: { 
 									tripId: trip.id,
 									id: counteredRequest.request.id,
-									context: 'countered'
 								}
 							}
 						">
@@ -133,12 +131,12 @@
 				<ul class="list pa0" v-if="requestForLocation">
 					<li v-for="(request) in requestForLocation" :key="request.id" class="mb3">
 						<router-link 
+							class="link"
 							:to="{ 
-								name: 'my-trips-request', 
+								name: 'their-request-pending', 
 								params: { 
 									tripId: trip.id,
 									id: request.id,
-									context: 'offered'
 								}
 							}
 						">
@@ -152,6 +150,16 @@
 		</div>
 
 
+		<div class="ph2 mb3">
+			<h2>Manage my Trip</h2>
+			<p>
+				Delete, edit or set preferences. Note: once your trip has attached Requests, you need to request deletion of your trip.
+			</p>
+		</div>
+
+		<button type="submit" class="small-block box mb4">
+			Edit Request
+		</button>
   </div>
 </template>
 
@@ -213,16 +221,15 @@ export default {
 					this.trip = trip;
 					
 					this.counteredRequests = this.trip.counteredRequests;
-					console.log('this.trip', this.counteredRequests);
 					this.attachedRequests = this.trip.attachedRequests;
 					this.loading = false;
 
-					if (this.attachedRequests.length >= 1) {
-						this.showTab = 'attached';
-						// HACK REMOVE THIS AFTER RECORDING
-						this.requestForLocation = []
-						return;
-					}
+					// if (this.attachedRequests.length >= 1) {
+					// 	this.showTab = 'attached';
+					// 	// HACK REMOVE THIS AFTER RECORDING
+					// 	this.requestForLocation = []
+					// 	return;
+					// }
 
 					// Get requests at trip destination location
 					this.$store.dispatch('getRequestsForLocation', this.trip.toLocation.googlePlaceId)
