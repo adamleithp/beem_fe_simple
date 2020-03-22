@@ -32,10 +32,12 @@
 
 			<!-- IF PENDING/OFFERED -->
 			<div class="ph2 mv3 flex justify-between" v-if="context === 'pending'">
+				<!-- Button inside box -->
 				<button class="box flex-1 mr2" 
 					@click="acceptRequestOffer()">
 					Accept Offer
 				</button>
+				<!-- Button inside box -->
 				<button class="box flex-1 ml2" 
 					@click="showCounterRequestForm()">
 					Counter Offer
@@ -78,12 +80,21 @@
 
 
 			<div v-if="context === 'accepted'">
-				<div class="ph2">
-					<button type="submit" class="small-block box mb4">
-						Update your checklist
-					</button>
+				<div class="ph2 mb3 flex">
+					<div class="medium-block medium-block--stretch box box--accepted">
+						<p class="ma0 f4">Status</p>
+						<h2 class="ma0 mt2 mb3 lh-title">You've accepted</h2>
+
+						<div class="flex justify-between">
+							<!-- Button inside box -->
+							<button type="submit" class="small-block box">
+								Update your checklist
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
+
 			
 
 
@@ -98,6 +109,7 @@
 							{{myCounterOfferOnRequest.amount}}
 						</h2>
 
+						<!-- Button inside box -->
 						<button class="box w-100" 
 							@click="acceptCounterOffer()">
 							Cancel Counter Offer
@@ -131,16 +143,11 @@
 				</div>
 			
 				<div class="ph2 mb1">
-					<div class="medium-block medium-block--stretch box box--caution">
+					<div class="medium-block medium-block--stretch box box--accepted">
 						<p class="ma0 f4">Time left until your trip</p>
-						<h2 class="ma0 mt2 mb2 lh-title">
+						<h2 class="ma0 mt2 lh-title">
 							{{timeLeftUntilMyTrip}}
 						</h2>
-	<!-- 
-						<button class="box w-100" 
-							@click="acceptCounterOffer()">
-							Cancel Counter Offer
-						</button> -->
 					</div>
 				</div>
 
@@ -201,13 +208,13 @@
 							</label>
 
 
-							<div class="mv3 flex justify-between">
+							<div class="mv3">
 								<button type="submit" class="small-block box">
 									Counter Offer
 								</button>
 							</div>
 
-							<div class="mv3 flex justify-between">
+							<div class="mv3">
 								<button @click="hideCounterRequestForm()"  class="small-block box box--light">
 									Cancel Counter offer
 								</button>

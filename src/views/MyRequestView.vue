@@ -14,6 +14,9 @@
 				<p>
 					This is your request. You can view if it's status, update it's info.
 				</p>
+				<p v-if="status === 'countered'">
+					<span class="text--bold">Your request offer has been countered</span>. You can accept, or decline the counter offer.
+				</p>
 			</div>
 
 			<div class="ph2 mb3">
@@ -26,47 +29,6 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="ph2 mb3 flex">
-				<div class="medium-block medium-block--stretch box box--light mr2 flex-2">
-					<p class="ma0 f4">Status</p>
-					<h2 class="ma0 mt2 lh-title">{{request.status}}</h2>
-				</div>
-				<div class="medium-block medium-block--stretch box box--light ml2 flex-1 w-10">
-					<p class="ma0 f4">Views</p>
-					<h2 class="ma0 mt2 lh-title">13</h2>
-				</div>
-			</div>
-
-			<!-- CONDITION CONTENT =================================== -->
-
-			<div v-if="status === 'countered'">
-				<div class="ph2">
-					<button type="submit" class="small-block box mb4">
-						View counter offers
-					</button>
-				</div>
-			</div>
-
-			<div v-if="status === 'pending'">
-				<div class="ph3">
-					<p class="text--info flex hide">
-						<span class="mr2">
-							<IconInformation style="width:17px;"/>
-						</span>
-						HINT: Try increasing your offer.
-					</p>
-				</div>
-			</div>
-
-
-			
-
-			<!-- IF ATTACHED ===================================-->
-			<div class="ph2 mb3 flex" v-if="status === 'attached'">
-				SHOW ATTACHED FOR HERE
-			</div>
-			<!-- CONDITION CONTENT =================================== -->
 
 
 			<div class="ph2 mb3 flex">
@@ -85,6 +47,69 @@
 				</div>
 			</div>
 
+
+
+			<div class="ph2 mb3">
+				<!-- CONDITION CONTENT =================================== -->
+				<div
+					v-if="status === 'pending'" 
+					class="medium-block medium-block--stretch box box--light mr2 flex-2">
+					<p class="ma0 f4">Status</p>
+					<h2 class="ma0 mt2 lh-title">{{request.status}}</h2>
+				</div>
+
+				<div
+					v-if="status === 'countered'" 
+					class="medium-block medium-block--stretch box box--caution mr2 flex-2">
+					<p class="ma0 f4">Status</p>
+					<h2 class="ma0 mt2 mb2 lh-title">{{request.status}}</h2>
+
+					<!-- Button inside box -->
+					<button type="submit" class="small-block box">
+						View counter offers
+					</button>
+				</div>
+
+				<div
+					v-if="status === 'attached'" 
+					class="medium-block medium-block--stretch box box--accepted mr2 flex-2">
+					<p class="ma0 f4">Status</p>
+					<h2 class="ma0 mt2 lh-title">{{request.status}}</h2>
+				</div>
+				<!-- CONDITION CONTENT =================================== -->
+
+				<!-- <div class="medium-block medium-block--stretch box box--light ml2 flex-1 w-10">
+					<p class="ma0 f4">Views</p>
+					<h2 class="ma0 mt2 lh-title">13</h2>
+				</div> -->
+			</div>
+
+			<!-- CONDITION CONTENT =================================== -->
+			<div v-if="status === 'pending'">
+				<div class="ph3">
+					<p class="text--info flex hide">
+						<span class="mr2">
+							<IconInformation style="width:17px;"/>
+						</span>
+						HINT: Try increasing your offer.
+					</p>
+				</div>
+			</div>
+
+
+			
+
+			<!-- IF ATTACHED ===================================-->
+			<div class="ph2 mb3 flex" v-if="status === 'attached'">
+				<div class="medium-block medium-block--stretch box box--accepted">
+					<p class="ma0 f4">You should get your package on</p>
+					<h2 class="ma0 mt2 lh-title">{{tripArrivingDate}}</h2>
+				</div>
+			</div>
+			<!-- CONDITION CONTENT =================================== -->
+
+
+
 			<div class="ph2 mb3">
 				<div class="medium-block medium-block--stretch box box--light">
 					<img src="@/assets/maps.png" alt="">
@@ -94,15 +119,15 @@
 				</div>
 			</div>
 		
-			<div class="ph2 mb4">
+			<div class="ph2 mb5">
 				<div class="medium-block medium-block--stretch box box--light">
-					<p class="ma0 f4">Where the item comes from</p>
+					<p class="ma0 f4">Meeting spot to pickup your item</p>
 					<h2 class="ma0 mt2 lh-title"><Place :placeId="request.toLocation.googlePlaceId"/></h2>
 				</div>
 			</div>
 
 			<!-- IF COUNTERED =================================== -->
-			<div class="mb4" v-if="status === 'countered'">
+			<div class="mb5" v-if="status === 'countered'">
 				<div class="ph2 mb3">
 					<h2>Counter Requests</h2>
 					<p>
@@ -114,13 +139,15 @@
 					<li v-for="(counterOffer) in request.counterOffers" :key="counterOffer.id" class="mb3">
 						<div class="medium-block medium-block--stretch box box--caution" >
 							<p class="ma0 f4">A traveller countered your offer</p>
-							<h2 class="ma0 mt2 mb2 lh-title"><Currency :currencyCode="counterOffer.price.currencyCode"/>{{counterOffer.price.amount}}</h2>
+							<h2 class="ma0 mt2 mb3 lh-title"><Currency :currencyCode="counterOffer.price.currencyCode"/>{{counterOffer.price.amount}}</h2>
 
 							<div class="flex justify-between">
+								<!-- Button inside box -->
 								<button class="box flex-1 mr2" 
 									@click="acceptCounterOffer(counterOffer)">
 									Accept Counter
 								</button>
+								<!-- Button inside box -->
 								<button class="box flex-1 ml2" 
 									@click="declineCounterOffer(counterOffer)">
 									Decline Counter
@@ -146,15 +173,6 @@
 			</button>
 		</div>
   </div>
-
-  <!-- <div v-if="!loading">
-    <div class="mw7 center">
-			<h3>Your Request:</h3>
-			<div class="ba pa3">
-				<MyRequest @requestChanged="getRequest" :request="request"/>
-			</div>
-		</div>
-  </div> -->
 </template>
 
 <script>
@@ -172,12 +190,12 @@ export default {
 	},
 
 	data() {
-	
 		return {
 			request: {},
 			loading: true,
 			status: 'pending',
 			onThisTrip: null,
+			tripArrivingDate: '',
 		}
 	},
 
@@ -197,7 +215,10 @@ export default {
 					this.loading = false;
 
 					// If Trip
-					if (request.trip) this.onThisTrip = request.trip;
+					if (request.trip) {
+						this.onThisTrip = request.trip;
+						this.tripArrivingDate = this.formatDatetoYMD(request.trip.toDate)
+					}
 
 					if (request.status === 'PENDING') {
 						this.status = 'pending';
@@ -223,6 +244,7 @@ export default {
 			})
 				.then((request) => {
 					this.onThisTrip = request.trip;
+					this.tripArrivingDate = this.formatDatetoYMD(request.trip.toDate)
 					this.status = 'attached';
 				})
 		},
@@ -235,8 +257,25 @@ export default {
 			})
 				.then(() => {
 					this.onThisTrip = {};
+					this.tripArrivingDate = '';
 					this.status = 'pending';
+
+					console.log('TODO: This should add a counterRequest to trip.');
 				})
+		},
+
+		formatDatetoYMD(unixTimeStamp) {
+			let d = new Date(unixTimeStamp * 1000),
+				month = '' + (d.getMonth()),
+				day = '' + d.getDate(),
+				year = d.getFullYear();
+
+			if (month.length < 2)
+				month = '0' + month;
+			if (day.length < 2)
+				day = '0' + day;
+
+			return [year, month, day].join('-');
 		}
 	},
 

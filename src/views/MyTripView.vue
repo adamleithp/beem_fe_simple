@@ -1,6 +1,6 @@
 <template>
   <div class="my-trip pb5" v-if="!loading">
-		<div class="w-100 pt2 mb4">
+		<div class="w-100 pt2 mb5">
 
 			<div class="mt5 ph2 mb4 flex flex-row align-center">
 				<router-link to="/trips" class="black f6 text--info">
@@ -20,9 +20,13 @@
 			</div>
 
 			<div class="ph2">
-				<div class="medium-block box box--light">
-					Your Profit
-					<h1 class="ma0">{{totalProfitOfTrip}}</h1>
+				<div class="medium-block medium-block--stretch box"
+				:class="totalProfitOfTrip > 0 ? 'box--accepted': 'box--light'">
+					<p class="ma0 f4">Your Profit</p>
+					<h1 class="ma0 mt2 lh-title flex items-center">
+						<Currency :currencyCode="totalProfitOfTripCurrency"/><span class="mr2">{{totalProfitOfTrip}}</span>
+						<span class="f6 mt2">with {{attachedRequests.length}} requests</span>
+					</h1>
 				</div>
 			</div>
 		</div>
@@ -33,7 +37,7 @@
 			<p>These are the requests pending, countered, or accepted needed from <Place :placeId="trip.fromLocation.googlePlaceId" class="text--bold"/> to <Place :placeId="trip.toLocation.googlePlaceId" class="text--bold"/></p>
 		</div>
 
-		<div class="flex mb4">	
+		<div class="flex mb2">	
 			<div class="w-33">
 				<div class="ph2">
 					<div class="medium-block box pointer" 
@@ -67,7 +71,7 @@
 		</div>
 
 
-		<div class="ph2 mb4">
+		<div class="ph2 mb5">
 			<div class="" v-if="showTab === 'attached'">
 				<p v-if="!attachedRequests.length" class="text--info">No accepted packages yet</p>
 				<h3 v-if="attachedRequests.length">Accepted</h3>
@@ -165,6 +169,7 @@
 
 <script>
 /* eslint-disable no-console */
+import Currency from '@/components/Currency.vue'
 import Place from '@/components/Place.vue'
 import MyTrip from '@/components/MyTrip.vue'
 import MyTripsRequest from '@/components/MyTripsRequest.vue'
@@ -173,6 +178,7 @@ export default {
 	name: 'myTripView',
 	components: {
 		Place,
+		Currency,
 		MyTrip,
 		MyTripsRequest,
 	},
@@ -190,15 +196,22 @@ export default {
 	},
 
 	computed: {
+		totalProfitOfTripCurrency() {
+			// Get all prices
+			const currencySymbols = this.trip.attachedRequests.map((request) => {
+				// TODO: make sure this is the same for all attached...
+				return request.offeredPrice.currencyCode;
+			})
+			// TODO: this will have different currencies
+			return currencySymbols[0]
+		},
+
 		totalProfitOfTrip() {
-			let currencyCode = '';
 			let total = Number(0);
 
 			// Get all prices
 			const prices = this.trip.attachedRequests.map((request) => {
 				// TODO: make sure this is the same for all attached...
-				currencyCode = request.offeredPrice.currencyCode;
-
 				return request.offeredPrice.amount;
 			})
 
@@ -208,9 +221,7 @@ export default {
 				total += parseInt(price);
 			}
 
-			currencyCode = '$'			
-
-			return `${currencyCode}${total}`;
+			return total;
 		}
 	},
 

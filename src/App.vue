@@ -292,15 +292,20 @@ p {
 	}
 }
 	
+	.box--accepted {
+		background:#effff2;
+		color:#333;
+		border: 1px solid #32b34c;
+		&:hover {background: #effff2}
+	}
 	.box--caution {
 		background:#fbfbca;
 		color:#333;
-		border: 1px solid#bdbd70;
-
-		&:hover {
-			background: #fbfbca;
-		}
+		border: 1px solid #bdbd70;
+		&:hover {background: #fbfbca}
 	}
+
+	
 	.box--light {
 		background: #fff;
 		color: #4f4f4f;
@@ -312,9 +317,15 @@ p {
 		}
 	}
 		.box--light--active {
-			background: #646464 !important;
-			// color: #333;
-			// border: 1px solid #333;
+			cursor: auto !important;
+			background: #fff;
+			color: #4f4f4f;
+			border: 2px dotted #979797;
+
+			&:hover {
+				background: #fff;
+				color: #4f4f4f;
+			}
 		}
 
 
