@@ -66,14 +66,17 @@
 
 		<div class="section--total mb4">
 			<div class="flex justify-between">
-				<p>Price of product:</p><p>{{request.offeredPrice.currencyCode}} {{request.package.price.amount}}</p>
+				<p>Price of product:</p>
+				<p><Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.package.price.amount}}</p>
 			</div>
 			<div class="flex justify-between">
-				<p>Offer for pickup + delivery:</p><p>{{request.offeredPrice.currencyCode}} {{request.offeredPrice.amount}}</p>
+				<p>Offer for pickup + delivery:</p>
+				<p><Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.offeredPrice.amount}}</p>
 			</div>
 			<hr>
 			<div class="flex justify-between">
-				<p>Total:</p><p>{{request.offeredPrice.currencyCode}} {{calculateTotalPrice}}</p>
+				<p>Total:</p>
+				<p><Currency :currencyCode="request.offeredPrice.currencyCode"/>{{calculateTotalPrice}}</p>
 			</div>
 		</div>
 
@@ -85,8 +88,15 @@
 </template>
 
 <script>
+import Currency from '@/components/Currency.vue'
+
 export default {
 	name: 'RequestForm',
+
+	components: {
+		Currency,
+	},
+
 	data() {
 		return {
 			showlocationSuggestionsDropdown: null,
@@ -117,31 +127,6 @@ export default {
 						currencyCode: 'USD'
 					}
 				},
-				// Backup full
-				// offeredPrice: {
-				// 	amount: 0,
-				// 	currencyCode: 'USD'
-				// },
-				// fromLocation: {
-				// 	meta: '',
-				// 	googlePlaceId: '',
-				// 	lat: 0,
-				// 	lng: 0
-				// },
-				// toLocation: {
-				// 	meta: '',
-				// 	googlePlaceId: '',
-				// 	lat: 0,
-				// 	lng: 0
-				// },
-				// package: {
-				// 	name: '',
-				// 	description: '',
-				// 	price: {
-				// 		amount: 0,
-				// 		currencyCode: 'USD'
-				// 	}
-				// },
 			},
 		}
 	},

@@ -19,7 +19,6 @@
 
 <script>
 /* eslint-disable no-console */
-// import Status from '@/components/Status.vue'
 import Currency from '@/components/Currency.vue'
 
 export default {
@@ -30,7 +29,6 @@ export default {
 	],
 
 	components: {
-		// Status,
 		Currency,
 	},
 }
