@@ -700,7 +700,7 @@ export default new Vuex.Store({
 					});
 
 					try {
-						await fetch(process.env.VUE_APP_API_URL, {
+						const response = await fetch(process.env.VUE_APP_API_URL, {
 							headers: {
 								'content-type': 'application/json',
 							},
@@ -708,9 +708,9 @@ export default new Vuex.Store({
 							body: query,
 						});
 
-						// const responseJson = await response.json();
+						const responseJson = await response.json();						
 						await dispatch('getMyRequests');
-						return true;
+						return responseJson.data.createRequest;
 					} catch (error) {
 						return false;
 					}

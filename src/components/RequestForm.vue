@@ -88,6 +88,8 @@
 </template>
 
 <script>
+/* eslint-disable no-console */
+
 import Currency from '@/components/Currency.vue'
 
 export default {
@@ -136,8 +138,21 @@ export default {
 		async handleRequestCreate() {
 			// Call async action
 			this.$store.dispatch('createRequest', this.request)
-				.then(() => {
+				.then((request) => {
+					console.log('request :', request);
+					let messageSuccess = {
+						title: 'Request Created ☐',
+						message: 'Redirecting you there'
+					}
+					// Tell parent of event.
 					this.$emit('requestCreated');
+
+					// Set App Modal (good job!)
+					this.$store.dispatch('showAppMessage', messageSuccess).then(() => {
+
+						// Redirect to Request created.
+						this.$router.push({ name: 'my-request', params: { id: request.id } })
+					})
 				})
 		},
 
