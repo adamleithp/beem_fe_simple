@@ -79,6 +79,7 @@
 				<ul class="list pa0" v-if="attachedRequests.length">
 					<li v-for="(request) in attachedRequests" :key="request.id" class="mb3">
 						<router-link 
+							class="link"
 							:to="{ 
 								name: 'their-request-accepted', 
 								params: { 
@@ -111,6 +112,7 @@
 						</div> -->
 
 						<router-link 
+							class="link"
 							:to="{ 
 								name: 'their-request-countered', 
 								params: { 

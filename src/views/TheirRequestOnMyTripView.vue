@@ -300,6 +300,11 @@ export default {
 
 			// what's left is seconds
 			// var seconds = delta % 60;  // in theory the modulus is not required
+
+			// Dont show days until if it's zero.
+			if (days === 0) {
+				return `${hours} hours`
+			}
 			return `${days} days, ${hours} hours`
 		}
 	},

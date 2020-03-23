@@ -141,7 +141,7 @@ export default {
 				.then((request) => {
 					console.log('request :', request);
 					let messageSuccess = {
-						title: 'Request Created ☐',
+						title: 'Request Created ✓',
 						message: 'Redirecting you there'
 					}
 					// Tell parent of event.
