@@ -104,14 +104,6 @@
 
 				<ul class="list pa0" v-if="counteredRequests.length">
 					<li v-for="(counteredRequest) in counteredRequests" :key="counteredRequest.id" class="mb3">
-						<!-- <div class="ba pa3">
-							<h3>name: {{counteredRequest.request.package.name}}</h3>
-							<p>Cost of product: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.package.price.amount}}</p>
-							<p>Bounty: {{counteredRequest.request.offeredPrice.currencyCode}} {{counteredRequest.request.offeredPrice.amount}}</p>
-							<p>You've countered with: {{counteredRequest.price.currencyCode}} {{counteredRequest.price.amount}}</p>
-							<p>Status of counter offer: {{counteredRequest.counterStatus}}</p>
-						</div> -->
-
 						<router-link 
 							class="link"
 							:to="{ 
@@ -132,7 +124,6 @@
 
 
 			<div class="" v-if="showTab === 'offered'">
-				<!-- <h3 v-if="!pendingRequestsForLocation.length"></h3> -->
 				<p v-if="!pendingRequestsForLocation.length" class="text--info">No Pending requested to <Place :placeId="trip.toLocation.googlePlaceId"/></p>
 				<h3 v-if="pendingRequestsForLocation.length">Offered</h3>
 
