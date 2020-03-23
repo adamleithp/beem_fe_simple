@@ -412,12 +412,17 @@ p {
 	position: relative;
 }
 
-
-.text--increase {
+.text--capitalize {
+	text-transform: capitalize;
+}
+.text--positive {
 	color: #73ff73;
-	font-size: 1.4em;
-	line-height: 0;
-	vertical-align: middle;
+}
+.text--neutral {
+	color: #fff673;
+}
+.text--negative {
+	color: #f94f00;
 }
 </style>
 	

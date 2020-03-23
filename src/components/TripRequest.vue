@@ -6,9 +6,6 @@
 			<div class="pa3 flex-grow-1">
 				<h3>
 					name: {{request.package.name}}
-					<span v-if="status === 'REJECTED' || status === 'ACCEPTED'">
-						<Status :statusString="status"/>
-					</span>
 				</h3>
 				<p>Cost of product: <Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.package.price.amount}}</p>
 				<p>Bounty: <Currency :currencyCode="request.offeredPrice.currencyCode"/>{{request.offeredPrice.amount}}</p>
@@ -68,7 +65,6 @@
 
 <script>
 /* eslint-disable no-console */
-import Status from '@/components/Status.vue'
 import Currency from '@/components/Currency.vue'
 
 export default {
@@ -84,7 +80,6 @@ export default {
 	],
 
 	components: {
-		Status,
 		Currency,
 	},
 

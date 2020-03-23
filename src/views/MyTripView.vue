@@ -64,7 +64,7 @@
 						:class="showTab === 'offered' ? 'box--light--active':''"
 						@click="showTab = 'offered'">
 						Pending
-						<h1 class="ma0">{{requestForLocation.length}}</h1>
+						<h1 class="ma0">{{pendingRequestsForLocation.length}}</h1>
 					</div>
 				</div>
 			</div>
@@ -89,7 +89,8 @@
 							}
 						">
 							<MyTripsRequest
-								:request="request"/>
+								:request="request"
+								:isLink="true"/>
 						</router-link>
 
 					</li>
@@ -122,7 +123,8 @@
 							}
 						">
 							<MyTripsRequest
-								:request="counteredRequest.request"/>
+								:request="counteredRequest.request"
+								:isLink="true"/>
 						</router-link>
 					</li>
 				</ul>
@@ -130,12 +132,12 @@
 
 
 			<div class="" v-if="showTab === 'offered'">
-				<!-- <h3 v-if="!requestForLocation.length"></h3> -->
-				<p v-if="!requestForLocation.length" class="text--info">No packages requested to <Place :placeId="trip.toLocation.googlePlaceId"/> yet 😥</p>
-				<h3 v-if="requestForLocation.length">Offered</h3>
+				<!-- <h3 v-if="!pendingRequestsForLocation.length"></h3> -->
+				<p v-if="!pendingRequestsForLocation.length" class="text--info">No Pending requested to <Place :placeId="trip.toLocation.googlePlaceId"/></p>
+				<h3 v-if="pendingRequestsForLocation.length">Offered</h3>
 
-				<ul class="list pa0" v-if="requestForLocation">
-					<li v-for="(request) in requestForLocation" :key="request.id" class="mb3">
+				<ul class="list pa0" v-if="pendingRequestsForLocation">
+					<li v-for="(request) in pendingRequestsForLocation" :key="request.id" class="mb3">
 						<router-link 
 							class="link"
 							:to="{ 
@@ -147,7 +149,8 @@
 							}
 						">
 							<MyTripsRequest
-								:request="request"/>
+								:request="request"
+								:isLink="true"/>
 						</router-link>
 
 					</li>
@@ -188,7 +191,7 @@ export default {
 	data() {
 		return {
 			trip: {},
-			requestForLocation: [],
+			pendingRequestsForLocation: [],
 			attachedRequests: [],
 			counteredRequests: [],
 			showTab: 'offered', //default tab open
@@ -231,42 +234,23 @@ export default {
 		async getTrip() {
 			this.$store.dispatch('getMyTrip', this.$route.params.id)
 				.then((trip) => {
-					this.trip = trip;
-					
+					this.trip = trip;					
 					this.counteredRequests = this.trip.counteredRequests;
 					this.attachedRequests = this.trip.attachedRequests;
 					this.loading = false;
 
-					// if (this.attachedRequests.length >= 1) {
-					// 	this.showTab = 'attached';
-					// 	// HACK REMOVE THIS AFTER RECORDING
-					// 	this.requestForLocation = []
-					// 	return;
-					// }
-
 					// Get requests at trip destination location
 					this.$store.dispatch('getRequestsForLocation', this.trip.toLocation.googlePlaceId)
 						.then((requests) => {
-							this.requestForLocation = requests;
+							// Get PENDING requests
+							const pendingRequests = requests.filter((request) => request.status === 'PENDING')
+							this.pendingRequestsForLocation = pendingRequests;
 						})
 				})
 				.catch(() => {
 					this.$router.push({ name: 'home'})
 				})
 		},
-
-		// Is this request attached to trip? return true or false;
-		isThisAttachedToTrip(requestId) {
-			const attachedRequests = this.attachedRequests.filter((request) => request.id === requestId)[0]
-			return (attachedRequests ? true : false)
-		},
-
-		// Is this request countered by traveller? return true or false;
-		isThisCounteredToTrip(requestId) {
-			const counteredRequests = this.counteredRequests.filter((request) => request.request.id === requestId)[0]
-			return (counteredRequests ? true : false)
-		},
-
 
 		formatDatetoYMD(unixTimeStamp) {
 			let d = new Date(unixTimeStamp * 1000),
