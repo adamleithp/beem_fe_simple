@@ -112,7 +112,7 @@
 
 			<div class="ph2 mb3">
 				<div class="medium-block medium-block--stretch box box--light">
-					<img src="@/assets/maps.png" alt="">
+					<img src="@/assets/maps.png" alt="" class="map-img">
 
 					<p class="ma0 f4">The location requested from</p>
 					<h2 class="ma0 mt2 lh-title"><Place :placeId="request.fromLocation.googlePlaceId"/></h2>

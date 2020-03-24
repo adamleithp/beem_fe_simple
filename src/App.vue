@@ -2,11 +2,15 @@
   <div id="app">
 
 
-    <div id="nav" >
-      <router-link to="/">🏠</router-link> 
-      <!-- <router-link to="/about">About</router-link> | -->
-      <router-link to="/trips">Trips</router-link>  
-      <router-link to="/requests">Requests</router-link>
+    <div id="nav" class="flex justify-between">
+      <div>
+				<router-link to="/">🏠</router-link> 
+				<router-link to="/trips">Trips</router-link>  
+				<router-link to="/requests">Requests</router-link>
+			</div>
+			<div>
+				<router-link to="/settings">Settings</router-link>
+			</div>
     </div>
     <router-view :key="$route.fullPath"/>
 
@@ -68,7 +72,6 @@ export default {
 #nav {
   padding: 30px 0;
 
-
   a {
 		font-size: 1.1em;
 		margin-right: 10px;
@@ -82,19 +85,7 @@ export default {
   }
 }
 
-.badge {
-	position: absolute;
-	top: 0.3em;
-	margin-left: 0.5em;
-	background: #4a6954;
-	color: white;
-	padding: 0.2em;
-	border-radius: 50%;
-	height: 1em;
-	width: 1em;
-	text-align: center;
-	line-height: 1.15em;
-}
+
 input[type="checkbox"]{
 	height: 2rem;
 	width: 2rem;
@@ -148,6 +139,19 @@ label {
 .status--pending {
 	background: #a9a9a9;
 }
+
+
+// Settings
+.payment-card-img {
+  display: block;
+	max-width: 100px;
+	max-height: 22px;
+  width: auto;
+  height: auto;
+	filter: grayscale(1);
+}
+
+
 
 
 .location-suggestion-dropdown {
@@ -244,10 +248,6 @@ p {
 	line-height: 1.5;
 }
 
-.text--info {
-	color: #979797;
-	font-size: .9em;
-}
 
 .big-block {
 	width: 100%;
@@ -265,7 +265,7 @@ p {
 	overflow: hidden;
 	border:1px solid #222;
 
-	img {
+	.map-img {
 		margin: -1em 0 1em -1em;
 		width: calc(100% + 2em);
 		max-width: 200%;
@@ -414,6 +414,14 @@ p {
 
 .text--capitalize {
 	text-transform: capitalize;
+}
+
+.text--info {
+	color: #979797;
+	font-size: .9em;
+}
+.text--gray {
+	color: #bbbbbb;
 }
 .text--positive {
 	color: #73ff73;

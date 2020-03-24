@@ -121,7 +121,7 @@
 
 			<div class="ph2 mb3">
 				<div class="medium-block medium-block--stretch box">
-					<img src="@/assets/maps.png" alt="">
+					<img src="@/assets/maps.png" alt="" class="map-img">
 
 					<p class="ma0 f4">Where to pick up the item</p>
 					<h2 class="ma0 mt2 lh-title underline"><Place :placeId="request.fromLocation.googlePlaceId"/></h2>
